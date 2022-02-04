@@ -11,9 +11,10 @@ group = "me.dinos"
 version = "1.0"
 
 repositories {
-    google()
-    mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    mavenCentral()
+    mavenLocal()
+    google()
 }
 
 dependencies {

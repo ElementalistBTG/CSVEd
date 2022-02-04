@@ -14,14 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 
-const val DEFAULT_WIDTH = 500
-const val DEFAULT_HEIGHT = 500
 
 @Composable
 fun App() {
-
-    var text by remember { mutableStateOf("Hello, World2!") }
-
     DesktopMaterialTheme {
         Column {
             //First row is for buttons

@@ -1,3 +1,4 @@
+import Controllers.EditCSV
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -8,12 +9,13 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun buttons() {
+    val editCSVClass = EditCSV()
     Row {
         OutlinedButton(
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.LightGray
             ),
-            onClick = { openFile() }) {
+            onClick = { editCSVClass.openFile() }) {
             Text("Open File")
         }
 
@@ -21,7 +23,7 @@ fun buttons() {
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.LightGray
             ),
-            onClick = { save() }) {
+            onClick = { editCSVClass.save() }) {
             Text("Save")
         }
 
@@ -29,19 +31,13 @@ fun buttons() {
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.LightGray
             ),
-            onClick = { saveAs() }) {
+            onClick = { editCSVClass.saveAs() }) {
             Text("Save as...")
         }
 
     }
 }
 
-fun openFile() {
 
-}
-
-fun save() {}
-
-fun saveAs() {}
 
 
