@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
 }
 
 tasks.withType<KotlinCompile>() {
