@@ -1,13 +1,11 @@
-package Controllers
+package ui
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import model.CSVUnit
-import java.io.File
-import java.awt.FileDialog
 
 class EditCSV {
 
-    fun openFile() {
+    fun openFile():List<CSVUnit> {
 
         //val file = FileDialog()
 
@@ -24,12 +22,12 @@ class EditCSV {
             readAllWithHeaderAsSequence().forEach { row: Map<String, String> ->
                 data.add(
                     CSVUnit(
-                        id = row["Unit ID"],
-                        name = row["Unit name"],
-                        enabled = row["Enabled"].equals("1"),
-                        latitude = row["Latitude"],
-                        longitude = row["Longitude"],
-                        elevation = row["Elevation"],
+                        id = row["Unit ID"]!!,
+                        name = row["Unit name"]!!,
+                        enabled = row["Enabled"]!!,
+                        latitude = row["Latitude"]!!,
+                        longitude = row["Longitude"]!!,
+                        altitude = row["Elevation"]!!,
                         antennaHeight = ""
                     )
                 )
@@ -37,13 +35,9 @@ class EditCSV {
             }
         }
         //println(data)
-        populateTable(data)
-
+        return data
     }
 
-    private fun populateTable(data : List<CSVUnit>){
-
-    }
 
     private fun clearTable(){}
 

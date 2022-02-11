@@ -20,6 +20,10 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
+
+    implementation("io.reactivex.rxjava3:rxjava:3.0.6")
+    implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
+
 }
 
 tasks.withType<KotlinCompile>() {

@@ -1,14 +1,14 @@
-import Controllers.EditCSV
+import ui.EditCSV
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import ui.MainViewModel
 
 @Composable
-fun buttons() {
+fun buttons(viewModel : MainViewModel) {
     val editCSVClass = EditCSV()
     Row {
         OutlinedButton(

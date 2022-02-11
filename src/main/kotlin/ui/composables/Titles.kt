@@ -11,6 +11,8 @@ fun titles() {
     Row(modifier = Modifier.height(IntrinsicSize.Min)) {
         Text("Id", modifier = Modifier.padding(2.dp).weight(id_weight))
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
+        Text("Name", modifier = Modifier.padding(2.dp).weight(name_weight))
+        Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
         Text("Latitude", modifier = Modifier.padding(2.dp).weight(lat_weight))
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
         Text("Longitude", modifier = Modifier.padding(2.dp).weight(long_weight))

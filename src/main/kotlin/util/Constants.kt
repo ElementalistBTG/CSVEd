@@ -2,11 +2,12 @@
 const val DEFAULT_WIDTH = 500
 const val DEFAULT_HEIGHT = 500
 
-const val id_weight = 0.5f
+const val id_weight = 0.2f
+const val name_weight = 0.7f
 
-const val lat_weight = 1.5f
+const val lat_weight = 1.2f
 
-const val long_weight = 1.5f
+const val long_weight = 1.2f
 
 const val alt_weight = 1f
 
