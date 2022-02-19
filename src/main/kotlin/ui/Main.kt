@@ -1,4 +1,5 @@
 package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+
 import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,12 +18,11 @@ import model.CSVUnit
 import rowData
 import titles
 import util.swapList
-import util.testData
-import java.io.File
+import java.nio.file.Path
 
-lateinit var myList : SnapshotStateList<CSVUnit>
-lateinit var pathOfOpenedFile : MutableState<String>
-lateinit var file: File
+
+lateinit var myList: SnapshotStateList<CSVUnit>
+lateinit var pathOfOpenedFile: MutableState<String>
 
 fun main() = application {
     Window(
@@ -40,7 +40,7 @@ fun main() = application {
                 buttons(
                     onOpenClicked = { openNewFile() },
                     onSaveClicked = {},
-                    onSaveAsClicked = {}
+                    onSaveAsClicked = { saveAsFile() }
                 )
                 Spacer(modifier = Modifier.padding(3.dp))
                 Text(text = "File: ${pathOfOpenedFile.value}")
@@ -60,17 +60,24 @@ fun main() = application {
     }
 }
 
+private var fileToSave: Path? = null
+
 fun openNewFile() {
     myList.clear()
-    val openFile = EditCSV().openFile()
-    file = openFile.second
-    myList.swapList(openFile.first)
-    pathOfOpenedFile.value = file.name
+    val fileOpened = EditCSV().openFile()
+    if(fileOpened!=null){
+        myList.swapList(fileOpened.first)
+        pathOfOpenedFile.value = fileOpened.second.name
+        fileToSave = fileOpened.second.toPath()
+    }
 }
 
-fun saveAsFile(file: File){
-    EditCSV().saveAs(file)
+fun saveAsFile() {
+    if(fileToSave != null){
+        EditCSV().saveAs(fileToSave!!)
+    }
 }
+
 
 
 

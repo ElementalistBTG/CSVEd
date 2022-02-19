@@ -14,3 +14,5 @@ const val alt_weight = 1f
 const val ant_alt_weight = 1f
 
 const val checkbox_weight = 0.7f
+
+const val start_directory = "C:\\Users\\Elementalist\\Desktop\\csv"
