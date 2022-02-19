@@ -15,7 +15,7 @@ fun buttons(viewModel : MainViewModel) {
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.LightGray
             ),
-            onClick = { editCSVClass.openFile() }) {
+            onClick = { viewModel.openFile() }) {
             Text("Open File")
         }
 

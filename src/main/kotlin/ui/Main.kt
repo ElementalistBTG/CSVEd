@@ -4,12 +4,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import buttons
+import model.CSVUnit
 import rowData
 import titles
 import util.testData
@@ -21,7 +25,7 @@ fun main() = application {
     ) {
 
         val viewModel = MainViewModel()
-        //viewModel.data.subscribe()
+        val items by viewModel.itemsFlow.collectAsState(initial = emptyList())
 
         DesktopMaterialTheme {
             Column {
@@ -34,8 +38,7 @@ fun main() = application {
                 Divider(color = Color.Red, modifier = Modifier.height(3.dp))
                 //Rest is for data
                 LazyColumn {
-                    //test data
-                    items(testData) { item ->
+                    items(items) { item ->
                         rowData(item)
                         Divider(color = Color.Black, modifier = Modifier.height(1.dp))
                     }

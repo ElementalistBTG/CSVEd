@@ -9,34 +9,21 @@ import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.toFlowable
 import io.reactivex.rxjava3.kotlin.toObservable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flow
 import model.CSVUnit
 import util.ViewModel
 import util.testData
 
 class MainViewModel : ViewModel() {
 
-    private val disposables = CompositeDisposable()
+    private val _dataList = mutableListOf<CSVUnit>()
+    val dataList: List<CSVUnit>
+        get() = _dataList
 
-    private val dataSubject: BehaviorSubject<MutableList<CSVUnit>> = BehaviorSubject.createDefault(mutableListOf())
-
-//    private lateinit var _data: Flowable<List<CSVUnit>>
-//    val data: Flowable<List<CSVUnit>>
-//        get() = _data
-
-    init {
-//        dataSubject.subscribe { systems ->
-//            _data = just(systems)
-//        }.addTo(disposables)
-//        getObservableFromList(EditCSV().openFile())
-        //getObservableFromList(testData).subscribe{println(it)}
-    }
-
-//    fun populateTable() {
-//        _data = EditCSV().openFile().toFlowable()
-//    }
-
-    fun clearData() {
-        disposables.clear()
+    fun openFile() {
+        getObservableFromList(EditCSV().openFile()).subscribe { _dataList.add(it) }
     }
 
     private fun getObservableFromList(myList: List<CSVUnit>) =
@@ -49,6 +36,15 @@ class MainViewModel : ViewModel() {
             }
             emitter.onComplete()
         }
+
+    var itemsFlow : Flow<List<CSVUnit>> = emptyFlow()
+
+    fun openNewFile(){
+       itemsFlow = flow {
+            val items = EditCSV().openFile()
+            emit(items)
+        }
+    }
 
 
 }

@@ -24,6 +24,8 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.0.6")
     implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+
 }
 
 tasks.withType<KotlinCompile>() {
