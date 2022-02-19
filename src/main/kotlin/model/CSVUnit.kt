@@ -7,5 +7,5 @@ data class CSVUnit(
     val latitude : String,
     val longitude : String,
     val altitude : String,
-    val antennaHeight : String
+    var antennaHeight : String
 )

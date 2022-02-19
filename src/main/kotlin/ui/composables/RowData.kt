@@ -1,4 +1,5 @@
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +15,7 @@ fun rowData(
 ) {
 
     val checkedState = remember { mutableStateOf(data.enabled) }
+    val antennaHeight = remember { mutableStateOf(data.antennaHeight) }
 
     Row(
         modifier = Modifier.height(IntrinsicSize.Min)
@@ -28,7 +30,13 @@ fun rowData(
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
         Text(text = data.altitude, modifier = Modifier.padding(2.dp).weight(alt_weight))
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-        Text(text = data.antennaHeight, modifier = Modifier.padding(2.dp).weight(ant_alt_weight))
+        BasicTextField(
+            value = antennaHeight.value,
+            onValueChange = {
+                data.antennaHeight = it
+                antennaHeight.value = it },
+            modifier = Modifier.padding(2.dp).weight(ant_alt_weight)
+        )
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
         Checkbox(
             checked = checkedState.value.toInt() == 1,

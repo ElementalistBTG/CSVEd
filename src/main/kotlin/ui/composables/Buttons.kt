@@ -1,37 +1,51 @@
 import ui.EditCSV
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import ui.MainViewModel
+import androidx.compose.ui.unit.dp
+
 
 @Composable
-fun buttons(viewModel : MainViewModel) {
-    val editCSVClass = EditCSV()
+fun buttons(
+    onOpenClicked: () -> Unit,
+    onSaveClicked: () -> Unit,
+    onSaveAsClicked: () -> Unit
+) {
     Row {
         OutlinedButton(
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.LightGray
             ),
-            onClick = { viewModel.openFile() }) {
+            onClick = onOpenClicked
+        ) {
             Text("Open File")
         }
 
-        OutlinedButton(
-            colors = ButtonDefaults.textButtonColors(
-                backgroundColor = Color.LightGray
-            ),
-            onClick = { editCSVClass.save() }) {
-            Text("Save")
-        }
+        Spacer(modifier = Modifier.padding(5.dp))
 
         OutlinedButton(
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.LightGray
             ),
-            onClick = { editCSVClass.saveAs() }) {
+            onClick = onSaveClicked
+        ) {
+            Text("Save")
+        }
+
+        Spacer(modifier = Modifier.padding(5.dp))
+
+        OutlinedButton(
+            colors = ButtonDefaults.textButtonColors(
+                backgroundColor = Color.LightGray
+            ),
+            onClick = onSaveAsClicked
+        ) {
             Text("Save as...")
         }
 

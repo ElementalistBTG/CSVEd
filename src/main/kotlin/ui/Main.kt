@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -16,7 +16,11 @@ import buttons
 import model.CSVUnit
 import rowData
 import titles
+import util.swapList
 import util.testData
+
+lateinit var myList : SnapshotStateList<CSVUnit>
+lateinit var pathOfOpenedFile : MutableState<String>
 
 fun main() = application {
     Window(
@@ -24,21 +28,27 @@ fun main() = application {
         onCloseRequest = ::exitApplication
     ) {
 
-        val viewModel = MainViewModel()
-        val items by viewModel.itemsFlow.collectAsState(initial = emptyList())
+        pathOfOpenedFile = remember { mutableStateOf("") }
+        myList = remember { mutableStateListOf<CSVUnit>() }
 
         DesktopMaterialTheme {
             Column {
                 //First row is for buttons
                 Spacer(modifier = Modifier.padding(5.dp))
-                buttons(viewModel)
+                buttons(
+                    onOpenClicked = { openNewFile() },
+                    onSaveClicked = {},
+                    onSaveAsClicked = {}
+                )
+                Spacer(modifier = Modifier.padding(3.dp))
+                Text(text = "File: ${pathOfOpenedFile.value}")
                 Spacer(modifier = Modifier.padding(5.dp))
                 //Second Row is for titles
                 titles()
                 Divider(color = Color.Red, modifier = Modifier.height(3.dp))
                 //Rest is for data
                 LazyColumn {
-                    items(items) { item ->
+                    items(myList) { item ->
                         rowData(item)
                         Divider(color = Color.Black, modifier = Modifier.height(1.dp))
                     }
@@ -46,9 +56,20 @@ fun main() = application {
             }
         }
     }
-
-
 }
+
+fun openNewFile() {
+    myList.clear()
+    val openFile = EditCSV().openFile()
+    myList.swapList(openFile.first)
+    pathOfOpenedFile.value = openFile.second
+}
+
+
+
+
+
+
 
 
 

@@ -1,13 +1,34 @@
 package ui
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.awt.ComposeWindow
+import androidx.compose.ui.window.AwtWindow
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import model.CSVUnit
+import java.awt.FileDialog
+import java.awt.Frame
+import java.io.File
+import java.nio.file.Paths
 
 class EditCSV {
 
-    fun openFile():List<CSVUnit> {
+    private fun openFileDialog(window: ComposeWindow, title: String): File {
+        return FileDialog(window, title, FileDialog.LOAD).apply {
+            isMultipleMode = false
+            file = "*.csv"
+            isVisible = true
+        }.files[0]
+    }
 
-        //val file = FileDialog()
+    fun openFile(): Pair<List<CSVUnit>,String> {
+
+        val file = openFileDialog(ComposeWindow(), "Choose a CSV file to open")
+        val fileString = file.toString()
+        val pathLength = fileString.length
+        val unitPath = fileString.substring(0, pathLength - 4) + "_Unit.csv"
+        val netPath = fileString.substring(0, pathLength - 4) + "_NetData.csv"
+        val fileName = file.name
 
         val myReader = csvReader {
             delimiter = ';'
@@ -16,7 +37,7 @@ class EditCSV {
 
         val data = mutableListOf<CSVUnit>()
 
-        myReader.open("C://Users/Dinos/Desktop/net_ed/new_net3_Unit.csv") {
+        myReader.open(unitPath) {
             readNext()
             readNext()
             readAllWithHeaderAsSequence().forEach { row: Map<String, String> ->
@@ -31,15 +52,29 @@ class EditCSV {
                         antennaHeight = ""
                     )
                 )
-                //println(row)
             }
         }
+
+        myReader.open(netPath) {
+            //skip first 9 lines
+            readNext()
+            readNext()
+            readNext()
+            readNext()
+            readNext()
+            readNext()
+            readNext()
+            readNext()
+            readNext()
+            val line = readNext()
+            for (i in data.indices) {
+                data[i].antennaHeight = line?.get(i + 1) ?: ""
+            }
+        }
+
         //println(data)
-        return data
+        return (data to fileName)
     }
-
-
-    private fun clearTable(){}
 
     fun save() {}
 
