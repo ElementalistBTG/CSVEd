@@ -13,6 +13,7 @@ import java.nio.file.Paths
 
 class EditCSV {
 
+
     private fun openFileDialog(window: ComposeWindow, title: String): File {
         return FileDialog(window, title, FileDialog.LOAD).apply {
             isMultipleMode = false
@@ -21,14 +22,21 @@ class EditCSV {
         }.files[0]
     }
 
-    fun openFile(): Pair<List<CSVUnit>,String> {
+    private fun saveFileDialog(window: ComposeWindow, title: String, fileName : String) {
+        FileDialog(window, title, FileDialog.SAVE).apply {
+            isMultipleMode = false
+            file = fileName
+            isVisible = true
+        }
+    }
+
+    fun openFile(): Pair<List<CSVUnit>,File> {
 
         val file = openFileDialog(ComposeWindow(), "Choose a CSV file to open")
         val fileString = file.toString()
         val pathLength = fileString.length
         val unitPath = fileString.substring(0, pathLength - 4) + "_Unit.csv"
         val netPath = fileString.substring(0, pathLength - 4) + "_NetData.csv"
-        val fileName = file.name
 
         val myReader = csvReader {
             delimiter = ';'
@@ -73,10 +81,16 @@ class EditCSV {
         }
 
         //println(data)
-        return (data to fileName)
+        return (data to file)
     }
 
     fun save() {}
 
-    fun saveAs() {}
+    fun saveAs(file: File) {
+        saveFileDialog(ComposeWindow(), "Save as ?",file.name)
+        val fileString = file.toString()
+        val pathLength = fileString.length
+        val unitPath = fileString.substring(0, pathLength - 4) + "_Unit.csv"
+        val netPath = fileString.substring(0, pathLength - 4) + "_NetData.csv"
+    }
 }

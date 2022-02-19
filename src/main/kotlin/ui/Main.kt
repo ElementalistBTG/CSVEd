@@ -18,9 +18,11 @@ import rowData
 import titles
 import util.swapList
 import util.testData
+import java.io.File
 
 lateinit var myList : SnapshotStateList<CSVUnit>
 lateinit var pathOfOpenedFile : MutableState<String>
+lateinit var file: File
 
 fun main() = application {
     Window(
@@ -61,8 +63,13 @@ fun main() = application {
 fun openNewFile() {
     myList.clear()
     val openFile = EditCSV().openFile()
+    file = openFile.second
     myList.swapList(openFile.first)
-    pathOfOpenedFile.value = openFile.second
+    pathOfOpenedFile.value = file.name
+}
+
+fun saveAsFile(file: File){
+    EditCSV().saveAs(file)
 }
 
 
