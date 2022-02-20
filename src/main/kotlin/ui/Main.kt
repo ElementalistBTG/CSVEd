@@ -74,7 +74,7 @@ fun openNewFile() {
 
 fun saveAsFile() {
     if(fileToSave != null){
-        EditCSV().saveAs(fileToSave!!)
+        EditCSV().saveAs(fileToSave!!, myList.toList())
     }
 }
 
