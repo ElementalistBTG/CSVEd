@@ -3,13 +3,15 @@ package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this 
 import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -32,6 +34,12 @@ fun main() = application {
 
         pathOfOpenedFile = remember { mutableStateOf("") }
         myList = remember { mutableStateListOf<CSVUnit>() }
+        val listState = rememberLazyListState() //for list items
+
+        val selectedItems = remember { mutableStateMapOf<Int, Boolean>() }
+        val onItemSelected = { index: Int, selected: Boolean -> selectedItems[index] = !selected }
+
+        val localClipboardManager = LocalClipboardManager.current
 
         DesktopMaterialTheme {
             Column {
@@ -39,8 +47,8 @@ fun main() = application {
                 Spacer(modifier = Modifier.padding(5.dp))
                 buttons(
                     onOpenClicked = { openNewFile() },
-                    onSaveClicked = {},
-                    onSaveAsClicked = { saveAsFile() }
+                    onSaveAsClicked = { saveAsFile() },
+                    onActionsClicked = { actionsMenu() }
                 )
                 Spacer(modifier = Modifier.padding(3.dp))
                 Text(text = "File: ${pathOfOpenedFile.value}")
@@ -49,9 +57,15 @@ fun main() = application {
                 titles()
                 Divider(color = Color.Red, modifier = Modifier.height(3.dp))
                 //Rest is for data
-                LazyColumn {
-                    items(myList) { item ->
-                        rowData(item)
+                LazyColumn(state = listState) {
+                    itemsIndexed(myList) { index, item ->
+                        val current = selectedItems[index] ?: false
+                        rowData(
+                            index = index,
+                            item = item,
+                            selected = current,
+                            onItemSelected = onItemSelected
+                        )
                         Divider(color = Color.Black, modifier = Modifier.height(1.dp))
                     }
                 }
@@ -60,12 +74,16 @@ fun main() = application {
     }
 }
 
+fun actionsMenu() {
+    //show the menu for actions
+}
+
 private var fileToSave: Path? = null
 
 fun openNewFile() {
     myList.clear()
     val fileOpened = EditCSV().openFile()
-    if(fileOpened!=null){
+    if (fileOpened != null) {
         myList.swapList(fileOpened.first)
         pathOfOpenedFile.value = fileOpened.second.name
         fileToSave = fileOpened.second.toPath()
@@ -73,7 +91,7 @@ fun openNewFile() {
 }
 
 fun saveAsFile() {
-    if(fileToSave != null){
+    if (fileToSave != null) {
         EditCSV().saveAs(fileToSave!!, myList.toList())
     }
 }

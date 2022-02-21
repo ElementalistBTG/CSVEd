@@ -1,9 +1,9 @@
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -11,30 +11,40 @@ import model.CSVUnit
 
 @Composable
 fun rowData(
-    data: CSVUnit
+    index: Int,
+    item: CSVUnit,
+    selected: Boolean,
+    onItemSelected: (Int,Boolean)-> Unit
 ) {
 
-    val checkedState = remember { mutableStateOf(data.enabled) }
-    val antennaHeight = remember { mutableStateOf(data.antennaHeight) }
+    val checkedState = remember { mutableStateOf(item.enabled) }
+    val antennaHeight = remember { mutableStateOf(item.antennaHeight) }
 
     Row(
         modifier = Modifier.height(IntrinsicSize.Min)
+            .toggleable(
+                value = selected,
+                onValueChange = { onItemSelected.invoke(index,selected) }
+            )
+            .background(if (selected) MaterialTheme.colors.secondary else Color.Transparent)
+
     ) {
-        Text(text = data.id, modifier = Modifier.padding(2.dp).weight(id_weight))
+        Text(text = item.id, modifier = Modifier.padding(2.dp).weight(id_weight))
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-        Text(text = data.name, modifier = Modifier.padding(2.dp).weight(name_weight))
+        Text(text = item.name, modifier = Modifier.padding(2.dp).weight(name_weight))
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-        Text(text = data.latitude, modifier = Modifier.padding(2.dp).weight(lat_weight))
+        Text(text = item.latitude, modifier = Modifier.padding(2.dp).weight(lat_weight))
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-        Text(text = data.longitude, modifier = Modifier.padding(2.dp).weight(long_weight))
+        Text(text = item.longitude, modifier = Modifier.padding(2.dp).weight(long_weight))
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-        Text(text = data.altitude, modifier = Modifier.padding(2.dp).weight(alt_weight))
+        Text(text = item.altitude, modifier = Modifier.padding(2.dp).weight(alt_weight))
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
         BasicTextField(
             value = antennaHeight.value,
             onValueChange = {
-                data.antennaHeight = it
-                antennaHeight.value = it },
+                item.antennaHeight = it
+                antennaHeight.value = it
+            },
             modifier = Modifier.padding(2.dp).weight(ant_alt_weight)
         )
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))

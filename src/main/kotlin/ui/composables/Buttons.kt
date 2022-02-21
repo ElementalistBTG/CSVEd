@@ -6,6 +6,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -14,8 +15,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun buttons(
     onOpenClicked: () -> Unit,
-    onSaveClicked: () -> Unit,
-    onSaveAsClicked: () -> Unit
+    onSaveAsClicked: () -> Unit,
+    onActionsClicked: () -> Unit
 ) {
     Row {
         OutlinedButton(
@@ -33,20 +34,20 @@ fun buttons(
             colors = ButtonDefaults.textButtonColors(
                 backgroundColor = Color.LightGray
             ),
-            onClick = onSaveClicked
+            onClick = onSaveAsClicked
         ) {
-            Text("Save")
+            Text("Save as...")
         }
 
         Spacer(modifier = Modifier.padding(5.dp))
 
         OutlinedButton(
             colors = ButtonDefaults.textButtonColors(
-                backgroundColor = Color.LightGray
+                backgroundColor = Color.Magenta
             ),
-            onClick = onSaveAsClicked
+            onClick = onActionsClicked
         ) {
-            Text("Save as...")
+            Text("Actions...")
         }
 
     }
