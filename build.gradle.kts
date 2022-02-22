@@ -26,6 +26,9 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 
+    implementation("androidx.compose.ui:ui:1.2.0-alpha03")
+
+
 }
 
 tasks.withType<KotlinCompile>() {

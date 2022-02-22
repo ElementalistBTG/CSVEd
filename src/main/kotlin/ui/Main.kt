@@ -38,6 +38,7 @@ fun main() = application {
 
         val selectedItems = remember { mutableStateMapOf<Int, Boolean>() }
         val onItemSelected = { index: Int, selected: Boolean -> selectedItems[index] = !selected }
+        val onShiftPressesed = {index:Int->}
 
         val localClipboardManager = LocalClipboardManager.current
 

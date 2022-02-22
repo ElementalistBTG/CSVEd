@@ -1,20 +1,28 @@
+import androidx.compose.foundation.ExperimentalDesktopApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.mouseClickable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.isShiftPressed
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
+
 import model.CSVUnit
 
+@OptIn(ExperimentalDesktopApi::class)
 @Composable
 fun rowData(
     index: Int,
     item: CSVUnit,
     selected: Boolean,
-    onItemSelected: (Int,Boolean)-> Unit
+    onItemSelected: (Int,Boolean)-> Unit,
+    onMultipleSelected: (Int,Boolean) -> Unit
 ) {
 
     val checkedState = remember { mutableStateOf(item.enabled) }
@@ -24,7 +32,23 @@ fun rowData(
         modifier = Modifier.height(IntrinsicSize.Min)
             .toggleable(
                 value = selected,
-                onValueChange = { onItemSelected.invoke(index,selected) }
+                onValueChange = {
+                    onItemSelected.invoke(index,selected)
+                }
+            )
+            .onKeyEvent {
+//                when(it.type){
+//
+//                }
+                if(it.isShiftPressed){
+                    onMultipleSelected.invoke(listOf(indexes),selected)
+                    true
+                }else{
+                    false
+                }
+            }
+            .mouseClickable(
+                onClick = {println("clicked")}
             )
             .background(if (selected) MaterialTheme.colors.secondary else Color.Transparent)
 
