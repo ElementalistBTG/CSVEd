@@ -4,15 +4,10 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import model.CSVUnit
-
-
-
 
 
 @OptIn(ExperimentalDesktopApi::class)
@@ -27,9 +22,9 @@ fun rowData(
 
     val checkedState = remember { mutableStateOf(item.enabled) }
     val antennaHeight = remember { mutableStateOf(item.antennaHeight) }
-    var expanded by mutableStateOf(false)
 
-    Box{
+
+    Box {
         Row(
             modifier = Modifier.height(IntrinsicSize.Min)
                 .toggleable(
@@ -38,12 +33,6 @@ fun rowData(
                         onItemSelected.invoke(!selected, index)
                     }
                 )
-                .mouseClickable(onClick = {
-                    if (this.buttons.isSecondaryPressed) {
-                        onRightMouseClick.invoke()
-                        expanded = true
-                    }
-                })
 //            .onKeyEvent {
 //                shiftPressed = it.isShiftPressed
 //                true
@@ -76,34 +65,7 @@ fun rowData(
                 modifier = Modifier.padding(2.dp).weight(checkbox_weight)
             )
         }
-        Box(
-            modifier = Modifier.fillMaxHeight().align(Alignment.TopEnd),
-            contentAlignment = Alignment.TopEnd
-            ){
-            if (expanded) {
-                println("dropdown menu called")
-                val items = listOf("Copy", "Cut", "Paste", "Delete", "Clear Selection", "Move To")
-                var selectedIndex by remember { mutableStateOf(0) }
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    items.forEachIndexed { index, itemTitle ->
-                        DropdownMenuItem(onClick = {
-                            println("$itemTitle clicked")
-                            selectedIndex = index
-                            expanded = false
-
-                        }) {
-                            Text(text = itemTitle)
-                        }
-                    }
-                }
-            }
-        }
-
     }
-
 }
 
 

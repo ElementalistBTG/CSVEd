@@ -1,12 +1,14 @@
 package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
 import androidx.compose.desktop.DesktopMaterialTheme
+import androidx.compose.foundation.ExperimentalDesktopApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.mouseClickable
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -31,6 +33,7 @@ lateinit var pathOfOpenedFile: MutableState<String>
 //val localClipboardManager = LocalClipboardManager.current
 
 
+@OptIn(ExperimentalDesktopApi::class)
 fun main() = application {
     Window(
         title = "Radio Mobile CSV Editor",
@@ -50,6 +53,7 @@ fun main() = application {
                 println("Index: " + item.key + " , value: " + item.value)
             }
         }
+        var expanded by mutableStateOf(false)
 
         DesktopMaterialTheme {
             Column {
@@ -66,7 +70,16 @@ fun main() = application {
                 titles()
                 Divider(color = Color.Red, modifier = Modifier.height(3.dp))
                 //Rest is for data
-                LazyColumn(state = listState) {
+
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.mouseClickable(onClick = {
+                        if (this.buttons.isSecondaryPressed) {
+                            onRightMouseClick.invoke()
+                            expanded = true
+                        }
+                    })
+                ) {
                     itemsIndexed(myList) { index, item ->
                         val current = selectedItems[index] ?: false
                         rowData(
@@ -77,6 +90,31 @@ fun main() = application {
                             onRightMouseClick = onRightMouseClick
                         )
                         Divider(color = Color.Black, modifier = Modifier.height(1.dp))
+                        Box(
+                            modifier = Modifier.fillMaxHeight(),
+                            contentAlignment = Alignment.TopEnd
+                        ) {
+                            if (expanded) {
+                                println("dropdown menu called")
+                                val items = listOf("Copy", "Cut", "Paste", "Delete", "Clear Selection", "Move To")
+                                var selectedIndex by remember { mutableStateOf(0) }
+                                DropdownMenu(
+                                    expanded = expanded,
+                                    onDismissRequest = { expanded = false }
+                                ) {
+                                    items.forEachIndexed { index, itemTitle ->
+                                        DropdownMenuItem(onClick = {
+                                            println("$itemTitle clicked")
+                                            selectedIndex = index
+                                            expanded = false
+
+                                        }) {
+                                            Text(text = itemTitle)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
