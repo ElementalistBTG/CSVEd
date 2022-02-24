@@ -10,6 +10,7 @@ fun <T> SnapshotStateList<T>.swapList(newList: List<T>) {
     addAll(newList)
 }
 
+//function to be able to disable save as existing file name
 class SaveFileChooser : JFileChooser() {
     override fun approveSelection() {
         val f = selectedFile

@@ -1,14 +1,17 @@
 package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
 import androidx.compose.desktop.DesktopMaterialTheme
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -25,22 +28,28 @@ import java.nio.file.Path
 
 lateinit var myList: SnapshotStateList<CSVUnit>
 lateinit var pathOfOpenedFile: MutableState<String>
+//val localClipboardManager = LocalClipboardManager.current
+
 
 fun main() = application {
     Window(
         title = "Radio Mobile CSV Editor",
         onCloseRequest = ::exitApplication
     ) {
-
         pathOfOpenedFile = remember { mutableStateOf("") }
         myList = remember { mutableStateListOf<CSVUnit>() }
         val listState = rememberLazyListState() //for list items
 
         val selectedItems = remember { mutableStateMapOf<Int, Boolean>() }
-        val onItemSelected = { index: Int, selected: Boolean -> selectedItems[index] = !selected }
-        val onShiftPressesed = {index:Int->}
-
-        val localClipboardManager = LocalClipboardManager.current
+//        val currentlySelectedItem = remember { mutableStateOf(0) }
+        val onItemSelected = { selected: Boolean, index: Int ->
+            selectedItems[index] = selected
+        }
+        val onRightMouseClick = {
+            for (item in selectedItems) {
+                println("Index: " + item.key + " , value: " + item.value)
+            }
+        }
 
         DesktopMaterialTheme {
             Column {
@@ -48,8 +57,7 @@ fun main() = application {
                 Spacer(modifier = Modifier.padding(5.dp))
                 buttons(
                     onOpenClicked = { openNewFile() },
-                    onSaveAsClicked = { saveAsFile() },
-                    onActionsClicked = { actionsMenu() }
+                    onSaveAsClicked = { saveAsFile() }
                 )
                 Spacer(modifier = Modifier.padding(3.dp))
                 Text(text = "File: ${pathOfOpenedFile.value}")
@@ -65,7 +73,8 @@ fun main() = application {
                             index = index,
                             item = item,
                             selected = current,
-                            onItemSelected = onItemSelected
+                            onItemSelected = onItemSelected,
+                            onRightMouseClick = onRightMouseClick
                         )
                         Divider(color = Color.Black, modifier = Modifier.height(1.dp))
                     }
@@ -75,13 +84,9 @@ fun main() = application {
     }
 }
 
-fun actionsMenu() {
-    //show the menu for actions
-}
 
 private var fileToSave: Path? = null
-
-fun openNewFile() {
+private fun openNewFile() {
     myList.clear()
     val fileOpened = EditCSV().openFile()
     if (fileOpened != null) {
@@ -91,11 +96,14 @@ fun openNewFile() {
     }
 }
 
-fun saveAsFile() {
+private fun saveAsFile() {
     if (fileToSave != null) {
         EditCSV().saveAs(fileToSave!!, myList.toList())
     }
 }
+
+
+
 
 
 
