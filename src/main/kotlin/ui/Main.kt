@@ -1,22 +1,17 @@
 package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
 import androidx.compose.desktop.DesktopMaterialTheme
-import androidx.compose.foundation.ExperimentalDesktopApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.mouseClickable
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -33,7 +28,8 @@ lateinit var pathOfOpenedFile: MutableState<String>
 //val localClipboardManager = LocalClipboardManager.current
 
 
-@OptIn(ExperimentalDesktopApi::class)
+@OptIn(ExperimentalDesktopApi::class, ExperimentalFoundationApi::class)
+
 fun main() = application {
     Window(
         title = "Radio Mobile CSV Editor",
@@ -48,12 +44,13 @@ fun main() = application {
         val onItemSelected = { selected: Boolean, index: Int ->
             selectedItems[index] = selected
         }
-        val onRightMouseClick = {
-            for (item in selectedItems) {
-                println("Index: " + item.key + " , value: " + item.value)
-            }
-        }
+
         var expanded by mutableStateOf(false)
+        var itemRightClicked by mutableStateOf(-1)
+        val onRightMouseClick = { index:Int->
+            itemRightClicked = index
+            expanded = true
+        }
 
         DesktopMaterialTheme {
             Column {
@@ -72,13 +69,7 @@ fun main() = application {
                 //Rest is for data
 
                 LazyColumn(
-                    state = listState,
-                    modifier = Modifier.mouseClickable(onClick = {
-                        if (this.buttons.isSecondaryPressed) {
-                            onRightMouseClick.invoke()
-                            expanded = true
-                        }
-                    })
+                    state = listState
                 ) {
                     itemsIndexed(myList) { index, item ->
                         val current = selectedItems[index] ?: false
@@ -94,18 +85,18 @@ fun main() = application {
                             modifier = Modifier.fillMaxHeight(),
                             contentAlignment = Alignment.TopEnd
                         ) {
-                            if (expanded) {
-                                println("dropdown menu called")
+                            if (expanded && itemRightClicked == index ) {
+                                println("dropdown menu called for index: $itemRightClicked")
                                 val items = listOf("Copy", "Cut", "Paste", "Delete", "Clear Selection", "Move To")
-                                var selectedIndex by remember { mutableStateOf(0) }
+                                var selectedMenuIndex by remember { mutableStateOf(0) }
                                 DropdownMenu(
-                                    expanded = expanded,
+                                    expanded = true,
                                     onDismissRequest = { expanded = false }
                                 ) {
                                     items.forEachIndexed { index, itemTitle ->
                                         DropdownMenuItem(onClick = {
                                             println("$itemTitle clicked")
-                                            selectedIndex = index
+                                            selectedMenuIndex = index
                                             expanded = false
 
                                         }) {
@@ -139,6 +130,8 @@ private fun saveAsFile() {
         EditCSV().saveAs(fileToSave!!, myList.toList())
     }
 }
+
+
 
 
 

@@ -17,55 +17,60 @@ fun rowData(
     item: CSVUnit,
     selected: Boolean,
     onItemSelected: (Boolean, Int) -> Unit,
-    onRightMouseClick: () -> Unit
+    onRightMouseClick: (Int) -> Unit
 ) {
 
     val checkedState = remember { mutableStateOf(item.enabled) }
     val antennaHeight = remember { mutableStateOf(item.antennaHeight) }
 
-
-    Box {
-        Row(
-            modifier = Modifier.height(IntrinsicSize.Min)
-                .toggleable(
-                    value = !selected,
-                    onValueChange = {
-                        onItemSelected.invoke(!selected, index)
-                    }
-                )
+    Row(
+        modifier = Modifier.height(IntrinsicSize.Min)
 //            .onKeyEvent {
 //                shiftPressed = it.isShiftPressed
 //                true
 //            }
-                .background(if (selected) MaterialTheme.colors.secondary else Color.Transparent)
-
-        ) {
-            Text(text = item.id, modifier = Modifier.padding(2.dp).weight(id_weight))
-            Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-            Text(text = item.name, modifier = Modifier.padding(2.dp).weight(name_weight))
-            Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-            Text(text = item.latitude, modifier = Modifier.padding(2.dp).weight(lat_weight))
-            Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-            Text(text = item.longitude, modifier = Modifier.padding(2.dp).weight(long_weight))
-            Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-            Text(text = item.altitude, modifier = Modifier.padding(2.dp).weight(alt_weight))
-            Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-            BasicTextField(
-                value = antennaHeight.value,
+            .background(if (selected) MaterialTheme.colors.secondary else Color.Transparent)
+            .mouseClickable(
+                onClick = {
+                    if (this.buttons.isSecondaryPressed) {
+                        onRightMouseClick.invoke(index)
+                    }
+                })
+            .toggleable(
+                value = !selected,
                 onValueChange = {
-                    item.antennaHeight = it
-                    antennaHeight.value = it
-                },
-                modifier = Modifier.padding(2.dp).weight(ant_alt_weight)
+                    onItemSelected.invoke(!selected, index)
+                    println("toggled item at index: $index")
+                }
             )
-            Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
-            Checkbox(
-                checked = checkedState.value.toInt() == 1,
-                onCheckedChange = { checkedState.value = if (it.toString() == "true") "1" else "0" },
-                modifier = Modifier.padding(2.dp).weight(checkbox_weight)
-            )
-        }
+
+    ) {
+        Text(text = item.id, modifier = Modifier.padding(2.dp).weight(id_weight))
+        Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
+        Text(text = item.name, modifier = Modifier.padding(2.dp).weight(name_weight))
+        Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
+        Text(text = item.latitude, modifier = Modifier.padding(2.dp).weight(lat_weight))
+        Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
+        Text(text = item.longitude, modifier = Modifier.padding(2.dp).weight(long_weight))
+        Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
+        Text(text = item.altitude, modifier = Modifier.padding(2.dp).weight(alt_weight))
+        Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
+        BasicTextField(
+            value = antennaHeight.value,
+            onValueChange = {
+                item.antennaHeight = it
+                antennaHeight.value = it
+            },
+            modifier = Modifier.padding(2.dp).weight(ant_alt_weight)
+        )
+        Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
+        Checkbox(
+            checked = checkedState.value.toInt() == 1,
+            onCheckedChange = { checkedState.value = if (it.toString() == "true") "1" else "0" },
+            modifier = Modifier.padding(2.dp).weight(checkbox_weight)
+        )
     }
+
 }
 
 
