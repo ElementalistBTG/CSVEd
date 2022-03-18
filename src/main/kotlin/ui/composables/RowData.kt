@@ -25,24 +25,23 @@ fun rowData(
 
     Row(
         modifier = Modifier.height(IntrinsicSize.Min)
-//            .onKeyEvent {
-//                shiftPressed = it.isShiftPressed
-//                true
-//            }
             .background(if (selected) MaterialTheme.colors.secondary else Color.Transparent)
             .mouseClickable(
                 onClick = {
                     if (this.buttons.isSecondaryPressed) {
                         onRightMouseClick.invoke(index)
+                    }else{
+                        onItemSelected.invoke(!selected, index)
                     }
+
                 })
-            .toggleable(
-                value = !selected,
-                onValueChange = {
-                    onItemSelected.invoke(!selected, index)
-                    println("toggled item at index: $index")
-                }
-            )
+//            .toggleable(
+//                value = !selected,
+//                onValueChange = {
+//                    onItemSelected.invoke(!selected, index)
+//                    println("toggled item at index: $index")
+//                }
+//            )
 
     ) {
         Text(text = item.id, modifier = Modifier.padding(2.dp).weight(id_weight))
@@ -70,15 +69,6 @@ fun rowData(
             modifier = Modifier.padding(2.dp).weight(checkbox_weight)
         )
     }
-
-}
-
-
-private fun copyItems() {
-
-}
-
-private fun clearSelection() {
 
 }
 

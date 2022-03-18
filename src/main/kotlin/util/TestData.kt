@@ -31,3 +31,13 @@ val testData = listOf<CSVUnit>(
         enabled = "0"
     )
 )
+
+val emptyCSV = CSVUnit(
+    id = "",
+    name = "",
+    latitude = "",
+    longitude = "",
+    altitude = "",
+    antennaHeight = "",
+    enabled = "0"
+)

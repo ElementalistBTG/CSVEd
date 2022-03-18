@@ -13,7 +13,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun buttons(
     onOpenClicked: () -> Unit,
-    onSaveAsClicked: () -> Unit
+    onSaveAsClicked: () -> Unit,
+    onClearSelectionClicked: () -> Unit,
+    onEnableAll: () -> Unit
 ) {
     Row {
         OutlinedButton(
@@ -36,8 +38,67 @@ fun buttons(
             Text("Save as...")
         }
 
+//        Divider(
+//            modifier = Modifier.width(5.dp), color = Color.Red
+//        )
+//
+//        OutlinedButton(
+//            colors = ButtonDefaults.textButtonColors(
+//                backgroundColor = Color.LightGray,
+//                contentColor = Color.Blue
+//            ),
+//            onClick = onSaveAsClicked
+//        ) {
+//            Text("Copy")
+//        }
+//
+//        Spacer(modifier = Modifier.padding(5.dp))
+//
+//        OutlinedButton(
+//            colors = ButtonDefaults.textButtonColors(
+//                backgroundColor = Color.LightGray,
+//                contentColor = Color.Blue
+//            ),
+//            onClick = onSaveAsClicked
+//        ) {
+//            Text("Cut")
+//        }
+//
+//        Spacer(modifier = Modifier.padding(5.dp))
+//
+//        OutlinedButton(
+//            colors = ButtonDefaults.textButtonColors(
+//                backgroundColor = Color.LightGray,
+//                contentColor = Color.Blue
+//            ),
+//            onClick = onSaveAsClicked
+//        ) {
+//            Text("Paste")
+//        }
+//
         Spacer(modifier = Modifier.padding(5.dp))
 
+        OutlinedButton(
+            colors = ButtonDefaults.textButtonColors(
+                backgroundColor = Color.LightGray,
+                contentColor = Color.Blue
+            ),
+            onClick = onClearSelectionClicked
+        ) {
+            Text("Clear Selection")
+        }
+
+        Spacer(modifier = Modifier.padding(5.dp))
+
+        OutlinedButton(
+            colors = ButtonDefaults.textButtonColors(
+                backgroundColor = Color.LightGray,
+                contentColor = Color.Blue
+            ),
+            onClick = onEnableAll
+        ) {
+            Text("Enable all")
+        }
 
     }
 }
