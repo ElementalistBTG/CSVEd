@@ -1,7 +1,7 @@
 package model
 
 data class CSVUnit(
-    val id : String,
+    var id : String,
     val name : String,
     var enabled : String,
     val latitude : String,

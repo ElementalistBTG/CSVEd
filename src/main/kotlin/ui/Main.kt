@@ -15,8 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -24,21 +22,16 @@ import buttons
 import model.CSVUnit
 import rowData
 import titles
-import ui.composables.AlertShow
-import util.emptyCSV
+import ui.composables.chooseMoveIndex
+import ui.composables.showDialogForNullSelection
+import ui.composables.showDialogForSingleSelection
 import util.swapList
-import util.testData
 import java.nio.file.Path
 
 
 lateinit var myList: SnapshotStateList<CSVUnit>
 lateinit var pathOfOpenedFile: MutableState<String>
 val myClipBoard = mutableListOf<CSVUnit>()
-
-
-//for text only
-//val localClipboardManager = LocalClipboardManager.current
-
 val selectedItems = mutableStateMapOf<Int, Boolean>()
 
 @OptIn(
@@ -50,14 +43,8 @@ fun main() = application {
         title = "Radio Mobile CSV Editor",
         onCloseRequest = ::exitApplication,
         onKeyEvent = {
-            if (it.isCtrlPressed && it.key == Key.C) {
-                copySelected()
-                true
-            } else if (it.isCtrlPressed && it.key == Key.X) {
-                cutSelected()
-                true
-            } else if (it.isCtrlPressed && it.key == Key.V) {
-                pasteSelected()
+            if (it.isCtrlPressed && it.key == Key.S) {
+                saveAsFile()
                 true
             } else if (it.key == Key.Delete) {
                 deleteSelected()
@@ -71,12 +58,9 @@ fun main() = application {
         pathOfOpenedFile = remember { mutableStateOf("") }
         myList = remember { mutableStateListOf<CSVUnit>() }
         val listState = rememberLazyListState() //for list items
-
-//        val currentlySelectedItem = remember { mutableStateOf(0) }
         val onItemSelected = { selected: Boolean, index: Int ->
             selectedItems[index] = selected
         }
-
         var expanded by mutableStateOf(false)
         var itemRightClicked by mutableStateOf(-1)
         val onRightMouseClick = { index: Int ->
@@ -101,7 +85,6 @@ fun main() = application {
                 titles()
                 Divider(color = Color.Red, modifier = Modifier.height(3.dp))
                 //Rest is for data
-
                 LazyColumn(
                     state = listState
                 ) {
@@ -120,8 +103,7 @@ fun main() = application {
                             contentAlignment = Alignment.TopEnd
                         ) {
                             if (expanded && itemRightClicked == index) {
-                                println("dropdown menu called for index: $itemRightClicked")
-                                val items = listOf("Copy", "Cut", "Paste before", "Delete", "Move To")
+                                val items = listOf("Cut", "Paste before", "Delete", "Move To")
                                 DropdownMenu(
                                     expanded = true,
                                     onDismissRequest = { expanded = false }
@@ -129,11 +111,10 @@ fun main() = application {
                                     items.forEachIndexed { index, itemTitle ->
                                         DropdownMenuItem(onClick = {
                                             when (index) {
-                                                0 -> copySelected()
-                                                1 -> cutSelected()
-                                                2 -> pasteSelected()
-                                                3 -> deleteSelected()
-                                                4 -> moveSelected()
+                                                0 -> cutSelected()
+                                                1 -> pasteSelected()
+                                                2 -> deleteSelected()
+                                                3 -> moveSelected()
                                             }
                                             expanded = false
                                         }) {
@@ -177,40 +158,74 @@ private fun saveAsFile() {
     }
 }
 
-private fun copySelected() {
-    myClipBoard.clear()
-    for(item in selectedItems){
-        if (item.value) {
-            myClipBoard.add(myList[item.key])
-        }
+private fun recalculateIds() {
+    for ((id, item) in myList.withIndex()) {
+        item.id = (id + 1).toString()
     }
-    println("copy fun triggered")
 }
 
 private fun cutSelected() {
-    println("cut fun triggered")
+    myClipBoard.clear()
+    val selection = singleSelection()
+    if (selection == -1) {
+        //nothing selected
+        showDialogForNullSelection()
+    }else{
+        for (item in selectedItems) {
+            if (item.value) {
+                val selectedRow = myList[item.key]
+                myClipBoard.add(selectedRow)
+                myList.remove(selectedRow)
+            }
+        }
+        clearSelection()
+        recalculateIds()
+    }
 }
 
 private fun moveSelected() {
-    println("move fun triggered")
+    val selection = singleSelection()
+    if (selection == -1) {
+        //nothing selected
+        showDialogForNullSelection()
+    }else{
+        val index = chooseMoveIndex()
+        //if dismissed we do nothing
+        //else we do the cut -> paste to specific index
+        if (index != -1) {
+            cutSelected()
+            createNewList(index)
+            recalculateIds()
+        }
+    }
 }
 
-//@Composable
 private fun pasteSelected() {
-    println("paste fun triggered")
     val indexTriggered = singleSelection()
-    if (indexTriggered != -1) {
-        myList.swapList(
-            myList.subList(0, indexTriggered) + myClipBoard + myList.subList(indexTriggered, myList.size - 1)
-        )
-
+    if (indexTriggered > 0) {
+        createNewList(indexTriggered)
+        clearSelection()
+        recalculateIds()
     } else {
-        //AlertShow()
+        showDialogForSingleSelection()
     }
 }
 
 private fun deleteSelected() {
-    println("deleted fun triggered")
+    val selection = singleSelection()
+    if (selection == -1) {
+        //nothing selected
+        showDialogForNullSelection()
+    }else{
+        for (item in selectedItems) {
+            if (item.value) {
+                val selectedRow = myList[item.key]
+                myList.remove(selectedRow)
+            }
+        }
+        clearSelection()
+        recalculateIds()
+    }
 }
 
 private fun singleSelection(): Int {
@@ -222,13 +237,20 @@ private fun singleSelection(): Int {
                 firstEntry = false
                 index = item.key
             } else {
-                index = -1
+                index = -2
                 break
             }
         }
     }
     return index
 }
+
+private fun createNewList(index: Int) {
+    myList.swapList(
+        myList.subList(0, index) + myClipBoard + myList.subList(index, myList.size - 1)
+    )
+}
+
 
 
 

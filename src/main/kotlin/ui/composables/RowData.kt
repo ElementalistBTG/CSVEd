@@ -30,19 +30,11 @@ fun rowData(
                 onClick = {
                     if (this.buttons.isSecondaryPressed) {
                         onRightMouseClick.invoke(index)
-                    }else{
+                    } else {
                         onItemSelected.invoke(!selected, index)
                     }
 
                 })
-//            .toggleable(
-//                value = !selected,
-//                onValueChange = {
-//                    onItemSelected.invoke(!selected, index)
-//                    println("toggled item at index: $index")
-//                }
-//            )
-
     ) {
         Text(text = item.id, modifier = Modifier.padding(2.dp).weight(id_weight))
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
