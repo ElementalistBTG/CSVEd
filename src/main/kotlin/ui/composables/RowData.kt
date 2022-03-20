@@ -57,7 +57,15 @@ fun rowData(
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
         Checkbox(
             checked = checkedState.value.toInt() == 1,
-            onCheckedChange = { checkedState.value = if (it.toString() == "true") "1" else "0" },
+            onCheckedChange = {
+                if (it.toString() == "true") {
+                    checkedState.value = "1"
+                    item.enabled = "1"
+                } else {
+                    checkedState.value = "0"
+                    item.enabled = "0"
+                }
+            },
             modifier = Modifier.padding(2.dp).weight(checkbox_weight)
         )
     }

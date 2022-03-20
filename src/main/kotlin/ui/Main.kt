@@ -1,9 +1,12 @@
 package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
@@ -11,21 +14,24 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 import buttons
-import kotlinx.coroutines.processNextEventInCurrentThread
 import model.CSVUnit
 import rowData
 import titles
 import ui.composables.chooseMoveIndexDialog
-import ui.composables.showDialogForNullSelection
-import ui.composables.showDialogForSingleSelection
+import ui.composables.showDialogWithMessage
 import util.swapList
 import java.awt.HeadlessException
 import java.awt.Toolkit
@@ -49,6 +55,7 @@ fun main() = application {
     Window(
         title = "Radio Mobile CSV Editor",
         onCloseRequest = ::exitApplication,
+        state = rememberWindowState(width = 800.dp, height = 800.dp),
         onKeyEvent = {
             if (it.isCtrlPressed && it.key == Key.S) {
                 saveAsFile()
@@ -95,47 +102,58 @@ fun main() = application {
                 titles()
                 Divider(color = Color.Red, modifier = Modifier.height(3.dp))
                 //Rest is for data
-                LazyColumn(
-                    state = listState
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    itemsIndexed(myList) { index, item ->
-                        val current = selectedItems[index] ?: false
-                        rowData(
-                            index = index,
-                            item = item,
-                            selected = current,
-                            onItemSelected = onItemSelected,
-                            onRightMouseClick = onRightMouseClick
-                        )
-                        Divider(color = Color.Black, modifier = Modifier.height(1.dp))
-                        Box(
-                            modifier = Modifier.fillMaxHeight(),
-                            contentAlignment = Alignment.TopEnd
-                        ) {
-                            if (expanded && itemRightClicked == index) {
-                                val items = listOf("Cut", "Paste before", "Delete", "Move To")
-                                DropdownMenu(
-                                    expanded = true,
-                                    onDismissRequest = { expanded = false }
-                                ) {
-                                    items.forEachIndexed { index, itemTitle ->
-                                        DropdownMenuItem(onClick = {
-                                            when (index) {
-                                                0 -> cutSelected()
-                                                1 -> pasteSelected()
-                                                2 -> deleteSelected()
-                                                3 -> moveSelected()
+                    LazyColumn(
+                        state = listState
+                    ) {
+                        itemsIndexed(myList) { index, item ->
+                            val current = selectedItems[index] ?: false
+                            rowData(
+                                index = index,
+                                item = item,
+                                selected = current,
+                                onItemSelected = onItemSelected,
+                                onRightMouseClick = onRightMouseClick
+                            )
+                            Divider(color = Color.Black, modifier = Modifier.height(1.dp))
+                            Box(
+                                modifier = Modifier.fillMaxHeight(),
+                                contentAlignment = Alignment.TopEnd
+                            ) {
+                                if (expanded && itemRightClicked == index) {
+                                    val items = listOf("Cut", "Paste before", "Delete", "Move To")
+                                    DropdownMenu(
+                                        expanded = true,
+                                        onDismissRequest = { expanded = false }
+                                    ) {
+                                        items.forEachIndexed { index, itemTitle ->
+                                            DropdownMenuItem(onClick = {
+                                                when (index) {
+                                                    0 -> cutSelected()
+                                                    1 -> pasteSelected()
+                                                    2 -> deleteSelected()
+                                                    3 -> moveSelected()
+                                                }
+                                                expanded = false
+                                            }) {
+                                                Text(text = itemTitle)
                                             }
-                                            expanded = false
-                                        }) {
-                                            Text(text = itemTitle)
                                         }
                                     }
                                 }
                             }
                         }
                     }
+                    VerticalScrollbar(
+                        modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                        adapter = rememberScrollbarAdapter(
+                            scrollState = listState
+                        )
+                    )
                 }
+
             }
         }
     }
@@ -187,7 +205,7 @@ private fun thereIsAtLeastOneRowSelected(): Boolean {
     val selection = singleSelection()
     return if (selection == -1) {
         //nothing selected
-        showDialogForNullSelection()
+        showDialogWithMessage("Choose at least one row first to perform action.")
         false
     } else {
         true
@@ -227,7 +245,7 @@ private fun moveSelected() {
 private fun pasteSelected() {
     val indexTriggered = singleSelection()
     //check if single selection is made
-    if (indexTriggered != -1) {
+    if (indexTriggered > 0) {
         //check if we have cut data before
         if (myClipBoard.isEmpty()) {
             //if empty that means that we want to paste from excel (or other source)
@@ -243,7 +261,7 @@ private fun pasteSelected() {
         clearSelection()
         recalculateIds()
     } else {
-        showDialogForSingleSelection()
+        showDialogWithMessage("Choose only one row first to perform action.")
     }
 }
 
@@ -281,7 +299,7 @@ private fun singleSelection(): Int {
 
 private fun pasteNewList(index: Int, data: List<CSVUnit>) {
     myList.swapList(
-        myList.subList(0, index) + data + myList.subList(index, myList.size - 1)
+        myList.subList(0, index) + data + myList.subList(index, myList.size)
     )
 }
 
@@ -289,14 +307,11 @@ private fun getClipBoard(): String {
     try {
         return Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor).toString()
     } catch (e: HeadlessException) {
-        // TODO Auto-generated catch block
-        e.printStackTrace()
+        showDialogWithMessage("HeadlessException: $e")
     } catch (e: UnsupportedFlavorException) {
-        // TODO Auto-generated catch block
-        e.printStackTrace()
+        showDialogWithMessage("UnsupportedFlavorException: $e")
     } catch (e: IOException) {
-        // TODO Auto-generated catch block
-        e.printStackTrace()
+        showDialogWithMessage("IOException: $e")
     }
     return ""
 }
@@ -313,8 +328,8 @@ private fun createCSVDataFromExcel(): List<CSVUnit>? {
         val delimiter2 = "\n" //delimiter for changing row
         val splitData = clipboardData
             .substringBeforeLast("") //drop the last space detected
-            .replace(".",",") //make all decimals to be displayed using commas and not dots
-            .split(delimiter1,delimiter2) //use the delimiters
+            .replace(".", ",") //make all decimals to be displayed using commas and not dots
+            .split(delimiter1, delimiter2) //use the delimiters
 
         //we split the data we got for every 3 values
         for (i in splitData.indices step 3) {
@@ -333,6 +348,7 @@ private fun createCSVDataFromExcel(): List<CSVUnit>? {
     }
     return returnList
 }
+
 
 
 

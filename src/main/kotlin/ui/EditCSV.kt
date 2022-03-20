@@ -101,6 +101,21 @@ class EditCSV {
                 }
             }
 
+            if(data.last().name != "LAST ENTRY"){
+                //In the end we add one more item as a last line
+                data.add(
+                    CSVUnit(
+                        id = "2000",
+                        name = "LAST ENTRY",
+                        enabled = "0",
+                        latitude = "0",
+                        longitude = "0",
+                        altitude = "0",
+                        antennaHeight = "0"
+                    )
+                )
+            }
+
             return (data to selectedFile!!)
         } else {
             return null
@@ -110,6 +125,7 @@ class EditCSV {
 
     fun saveAs(path: Path, dataList: List<CSVUnit>) {
         val filePath = path.toFile().path
+        println(filePath)
 
         val fileChooser = JFileChooser(start_directory)
         fileChooser.apply {
@@ -121,18 +137,17 @@ class EditCSV {
             // user selects a file
             val selectedFile = fileChooser.selectedFile
 
-
             saveNetCSV(filePath, selectedFile)
 
             saveNetDataCSV(
                 filePath.substring(0, filePath.length - 4) + "_NetData.csv",
-                selectedFile.absolutePath.substring(0, filePath.length - 3) + "_NetData.csv",
+                selectedFile.absolutePath.substring(0, selectedFile.absolutePath.length - 4) + "_NetData.csv",
                 dataList
             )
 
             saveUnitCSV(
                 filePath.substring(0, filePath.length - 4) + "_Unit.csv",
-                selectedFile.absolutePath.substring(0, filePath.length - 3) + "_Unit.csv",
+                selectedFile.absolutePath.substring(0, selectedFile.absolutePath.length - 4) + "_Unit.csv",
                 dataList
             )
         }
