@@ -44,7 +44,7 @@ fun showDialogForNullSelection() {
 }
 
 
-fun chooseMoveIndex(): Int {
+fun chooseMoveIndexDialog(): Int {
 
     val n: String? = JOptionPane.showInputDialog(
         ComposeWindow(),
@@ -53,13 +53,15 @@ fun chooseMoveIndex(): Int {
         JOptionPane.PLAIN_MESSAGE,
         null,
         null,
-        "0"
+        "1"
     ) as String?
 
     return if (isNumber(n)) {
-        n!!.toInt() - 2
+        //if a number is given as input then we take the -1 value since Kotlin/Java arrays start from 0 but ids start from 1
+        n!!.toInt() - 1
     } else {
         -1
+        //return value for not a number
     }
 }
 
