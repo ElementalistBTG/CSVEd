@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jlink" name="CSVEd">
+    <output-path>$PROJECT_DIR$/out/artifacts/CSVEd</output-path>
+    <root id="root" />
+  </artifact>
+</component>

@@ -146,7 +146,6 @@ class EditCSV {
             )
 
             saveUnitCSV(
-                filePath.substring(0, filePath.length - 4) + "_Unit.csv",
                 selectedFile.absolutePath.substring(0, selectedFile.absolutePath.length - 4) + "_Unit.csv",
                 dataList
             )
@@ -237,7 +236,7 @@ class EditCSV {
 
     }
 
-    private fun saveUnitCSV(filePath: String, writeToFilePath: String, dataList: List<CSVUnit>) {
+    private fun saveUnitCSV( writeToFilePath: String, dataList: List<CSVUnit>) {
         unitList.add(listOf("Radio Mobile"))
         unitList.add(listOf("$" + "Unit"))
         unitList.add(
