@@ -27,9 +27,11 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import buttons
+import endSystems
 import model.CSVUnit
 import rowData
 import titles
+import ui.composables.areYouSure
 import ui.composables.chooseMoveIndexDialog
 import ui.composables.showDialogWithMessage
 import util.swapList
@@ -45,7 +47,7 @@ lateinit var myList: SnapshotStateList<CSVUnit>
 lateinit var pathOfOpenedFile: MutableState<String>
 val myClipBoard = mutableListOf<CSVUnit>()
 val selectedItems = mutableStateMapOf<Int, Boolean>()
-
+var endSystemsRow = "0"
 
 @OptIn(
     ExperimentalDesktopApi::class, ExperimentalFoundationApi::class,
@@ -93,7 +95,8 @@ fun main() = application {
                     onOpenClicked = { openNewFile() },
                     onSaveAsClicked = { saveAsFile() },
                     onClearSelectionClicked = { clearSelection() },
-                    onEnableAll = { enableAll() }
+                    onEnableAll = { enableAll() },
+                    onSearch = { searchSystem() }
                 )
                 Spacer(modifier = Modifier.padding(3.dp))
                 Text(text = "File: ${pathOfOpenedFile.value}")
@@ -159,9 +162,13 @@ fun main() = application {
     }
 }
 
-fun enableAll() {
-    for (item in myList) {
-        item.enabled = "1"
+private fun searchSystem(){}
+
+private fun enableAll() {
+    if(areYouSure()){
+        for (item in myList) {
+            item.enabled = "1"
+        }
     }
 }
 
@@ -178,6 +185,7 @@ private fun openNewFile() {
         pathOfOpenedFile.value = fileOpened.second.name
         fileToSave = fileOpened.second.toPath()
     }
+    recalculateIds()
 }
 
 private fun saveAsFile() {
@@ -189,6 +197,8 @@ private fun saveAsFile() {
 private fun recalculateIds() {
     for ((id, item) in myList.withIndex()) {
         item.id = (id + 1).toString()
+        if(item.name == endSystems)
+            endSystemsRow = item.id
     }
 }
 
@@ -222,15 +232,20 @@ private fun performCut() {
         }
     }
     myList.removeAll(removeList)
+    //when adding rows it is done in parallel so the entries get mixed up so it need to be sorted before we paste
+    myClipBoard.sortBy { it.id.toInt() }
+    for(item in myClipBoard){
+        println(item)
+    }
 }
 
 private fun moveSelected() {
     if (thereIsAtLeastOneRowSelected()) {
-        val index = chooseMoveIndexDialog()
+        val index = chooseMoveIndexDialog(endSystemsRow)
         //if dismissed we do nothing
         //else we do the cut -> paste to specific index
         if (index != -1) {
-            //we save the row that was targeted and later we use this! (and not the index since the indices will change after the cut)
+            //we save the row that was targeted, and later we use this! (and not the index since the indices will change after the cut)
             val itemToPasteBefore = myList[index]
             performCut()
             clearSelection()

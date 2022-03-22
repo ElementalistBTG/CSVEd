@@ -15,7 +15,8 @@ fun buttons(
     onOpenClicked: () -> Unit,
     onSaveAsClicked: () -> Unit,
     onClearSelectionClicked: () -> Unit,
-    onEnableAll: () -> Unit
+    onEnableAll: () -> Unit,
+    onSearch: () -> Unit
 ) {
     Row {
         OutlinedButton(
@@ -98,6 +99,18 @@ fun buttons(
             onClick = onEnableAll
         ) {
             Text("Enable all")
+        }
+
+        Spacer(modifier = Modifier.padding(5.dp))
+
+        OutlinedButton(
+            colors = ButtonDefaults.textButtonColors(
+                backgroundColor = Color.LightGray,
+                contentColor = Color.Blue
+            ),
+            onClick = onSearch
+        ) {
+            Text("Search")
         }
 
     }

@@ -15,8 +15,9 @@ const val ant_alt_weight = 1f
 
 const val checkbox_weight = 0.7f
 
-//const val start_directory = "C:\\Users\\Elementalist\\Desktop\\csv"
-const val start_directory = "Desktop"
+const val start_directory = "C:\\Users\\Elementalist\\Desktop\\csv"
+//const val start_directory = "Desktop"
 
 //strings
 val endSystems = "000 END SYSTEMS"
+val lastEntry = "LAST ENTRY"

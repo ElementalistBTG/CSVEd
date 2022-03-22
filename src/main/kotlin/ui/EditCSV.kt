@@ -125,7 +125,6 @@ class EditCSV {
 
     fun saveAs(path: Path, dataList: List<CSVUnit>) {
         val filePath = path.toFile().path
-        println(filePath)
 
         val fileChooser = JFileChooser(start_directory)
         fileChooser.apply {
@@ -166,35 +165,27 @@ class EditCSV {
             readNext()?.let { netList.add(it) }
             readNext()?.let { netList.add(it) }
             readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }//14 Network
+            readNext()?.let { netList.add(it) }//12 Network
 
             val nextLine = readNext()?.first()
             val lastOccurenceUnit = nextLine?.lastIndexOf("\\")
             if (nextLine != null && lastOccurenceUnit != null) {
                 netList.add(
                     listOf(
-                        nextLine.substring(
-                            0,
-                            lastOccurenceUnit + 1
-                        ) + selectedFile.nameWithoutExtension + "_Unit.csv"
+                        nextLine.substring(0,lastOccurenceUnit + 1) + selectedFile.nameWithoutExtension + "_Unit.csv"
                     )
-                )//15 Unit
+                )//Unit
             }
-            readNext()?.let { netList.add(it) }//16 System
+            readNext()?.let { netList.add(it) }//System
 
             val nextLine2 = readNext()?.first()
             val lastOccurenceUnit2 = nextLine2?.lastIndexOf("\\")
             if (nextLine2 != null && lastOccurenceUnit2 != null) {
                 netList.add(
                     listOf(
-                        nextLine2.substring(
-                            0,
-                            lastOccurenceUnit2 + 1
-                        ) + selectedFile.nameWithoutExtension + "_NetData.csv"
+                        nextLine2.substring(0,lastOccurenceUnit2 + 1) + selectedFile.nameWithoutExtension + "_NetData.csv"
                     )
-                )//17 NetData
+                )//NetData
             }
         }
 
@@ -206,6 +197,9 @@ class EditCSV {
         val antennaHeights = mutableListOf<String>("1")
         dataList.forEach { item ->
             antennaHeights.add(item.antennaHeight)
+        }
+        for(i in dataList.size .. 1985){
+            antennaHeights.add("0")
         }
 
         try {

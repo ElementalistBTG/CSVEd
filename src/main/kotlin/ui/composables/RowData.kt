@@ -1,6 +1,5 @@
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -20,12 +19,12 @@ fun rowData(
     onRightMouseClick: (Int) -> Unit
 ) {
 
-    val checkedState = remember { mutableStateOf(item.enabled) }
-    val antennaHeight = remember { mutableStateOf(item.antennaHeight) }
+    val checkedState =  mutableStateOf(item.enabled)
+    val antennaHeight = mutableStateOf(item.antennaHeight) // we don't want to remember the state because then in every change we will have the same values (even though they would have changed)
 
     Row(
         modifier = Modifier.height(IntrinsicSize.Min)
-            .background(if (selected) MaterialTheme.colors.secondary else Color.Transparent)
+            .background(rowColor(item, selected))
             .mouseClickable(
                 onClick = {
                     if (this.buttons.isSecondaryPressed) {
@@ -48,9 +47,9 @@ fun rowData(
         Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.fillMaxHeight().width(1.dp))
         BasicTextField(
             value = antennaHeight.value,
-            onValueChange = {
-                item.antennaHeight = it
-                antennaHeight.value = it
+            onValueChange = { newValue ->
+                item.antennaHeight = newValue
+                antennaHeight.value = newValue
             },
             modifier = Modifier.padding(2.dp).weight(ant_alt_weight)
         )
@@ -70,6 +69,30 @@ fun rowData(
         )
     }
 
+}
+
+@Composable
+fun rowColor(system: CSVUnit, selected: Boolean): Color {
+    return if (system.name == endSystems || system.name == lastEntry) {
+        if (selected) {
+            Color(0xFFb862fc)
+        } else {
+            Color(0xFFddb3ff)
+        }
+    } else if (system.latitude == "0") {
+        if (selected) {
+            Color(0xFFffdb66)
+        } else {
+            Color(0xFFfcefb3)
+        }
+    } else {
+        if (selected) {
+            MaterialTheme.colors.secondary
+        } else {
+            Color.Transparent
+        }
+
+    }
 }
 
 
