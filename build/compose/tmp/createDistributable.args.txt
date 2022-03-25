@@ -27,4 +27,4 @@
 --copyright
 "© 2022 Dinos Michelis. All rights reserved."
 --app-version
-"1.0.1"
+"1.0.0"

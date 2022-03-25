@@ -1,12 +1,10 @@
 package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+
 import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
@@ -14,27 +12,21 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import buttons
-import endSystems
+import END_SYSTEMS
 import kotlinx.coroutines.launch
 import model.CSVUnit
 import rowData
-import start_directory
 import titles
 import ui.composables.areYouSure
-import ui.composables.chooseFolder
 import ui.composables.chooseMoveIndexDialog
 import ui.composables.showDialogWithMessage
 import util.swapList
@@ -79,9 +71,6 @@ fun main() = application {
         val listState = rememberLazyListState() //for list items
         val onItemSelected = { selected: Boolean, index: Int ->
             selectedItems[index] = selected
-//            for(selectItem in selectedItems){
-//                println(" ${selectItem.key}  ${selectItem.value}")
-//            }
         }
         var expanded by mutableStateOf(false)
         var itemRightClicked by mutableStateOf(-1)
@@ -101,25 +90,24 @@ fun main() = application {
                         itemWithMatchingName.add(item.id.toInt())
                     }
                 }
-                if(itemWithMatchingName.isNotEmpty()){
+                if (itemWithMatchingName.isNotEmpty()) {
                     listIterator = itemWithMatchingName.listIterator()
-                    listState.scrollToItem(itemWithMatchingName.first() -1)
+                    listState.scrollToItem(itemWithMatchingName.first() - 1)
                 }
             }
         }
 
         val findNext = {
             coroutineScope.launch {
-                if(listIterator.hasNext()){
-                    listState.scrollToItem(listIterator.next() -1)
-                }else if(listIterator.hasPrevious()){//ensure we don't call on empty iterator
+                if (listIterator.hasNext()) {
+                    listState.scrollToItem(listIterator.next() - 1)
+                } else if (listIterator.hasPrevious()) {//ensure we don't call on empty iterator
                     listIterator = itemWithMatchingName.listIterator()
-                    listState.scrollToItem(listIterator.next() -1)
+                    listState.scrollToItem(listIterator.next() - 1)
                 }
 
             }
         }
-
 
         DesktopMaterialTheme {
             Column {
@@ -131,11 +119,6 @@ fun main() = application {
                     onClearSelectionClicked = { clearSelection() },
                     onEnableAll = { enableAll() },
                     onSearch = searchSystem,
-                    onFolderSelect = {
-                        val folderChoosen = chooseFolder()
-                        if (folderChoosen != "")
-                            start_directory = folderChoosen
-                    },
                     onFindNext = findNext
                 )
                 Spacer(modifier = Modifier.padding(3.dp))
@@ -235,7 +218,7 @@ private fun saveAsFile() {
 private fun recalculateIds() {
     for ((id, item) in myList.withIndex()) {
         item.id = (id + 1).toString()
-        if (item.name == endSystems)
+        if (item.name == END_SYSTEMS)
             endSystemsRow = item.id
     }
 }

@@ -20,15 +20,10 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
-
     implementation("io.reactivex.rxjava3:rxjava:3.0.6")
     implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-
     implementation("androidx.compose.ui:ui:1.2.0-alpha03")
-
-
 }
 
 tasks.withType<KotlinCompile> {
@@ -36,20 +31,15 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }
 
-
-
 compose.desktop {
     application {
         mainClass = "ui.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Msi)//for windows only
             packageName = "CSVEd"
-            packageVersion = "1.0.1"
+            packageVersion = "1.0.0"
             description = "CSV editor for Radio Mobile csv files"
             copyright = "© 2022 Dinos Michelis. All rights reserved."
-            windows {
-                exePackageVersion = "1.0.1"
-            }
             windows.iconFile.set(File("C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\icon.ico"))
         }
     }

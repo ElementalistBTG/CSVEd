@@ -1,14 +1,15 @@
 package ui
 
+import LAST_USED_FOLDER
 import androidx.compose.ui.awt.ComposeWindow
 import com.github.doyaaaaaken.kotlincsv.dsl.context.WriteQuoteMode
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import model.CSVUnit
-import start_directory
 import java.io.File
 import java.nio.file.Path
 import java.util.*
+import java.util.prefs.Preferences
 import javax.swing.JFileChooser
 import javax.swing.JOptionPane
 import javax.swing.filechooser.FileFilter
@@ -48,15 +49,14 @@ class EditCSV {
     private var netDataList = mutableListOf<List<String>>()
     private var unitList = mutableListOf<List<String>>()
 
-    //fun chooseFileLocation()
-
     fun openFile(): Pair<List<CSVUnit>, File>? {
-
-        val fileChooser = JFileChooser(start_directory)
+        val prefs = Preferences.userRoot().node(this.javaClass.name)
+        val fileChooser = JFileChooser(prefs[LAST_USED_FOLDER, File(".").absolutePath])
         fileChooser.fileFilter = csvTypeFilter
         val result = fileChooser.showOpenDialog(ComposeWindow())
         if (result == JFileChooser.APPROVE_OPTION) {
             // user selects a file
+            prefs.put(LAST_USED_FOLDER, fileChooser.selectedFile.parent)
             val selectedFile = fileChooser.selectedFile
             val data = mutableListOf<CSVUnit>()
             val fileOpened = selectedFile.toString()
@@ -125,8 +125,8 @@ class EditCSV {
 
     fun saveAs(path: Path, dataList: List<CSVUnit>) {
         val filePath = path.toFile().path
-
-        val fileChooser = JFileChooser(start_directory)
+        val prefs = Preferences.userRoot().node(this.javaClass.name)
+        val fileChooser = JFileChooser(prefs[LAST_USED_FOLDER, File(".").absolutePath])
         fileChooser.apply {
             fileFilter = csvTypeFilter
             dialogTitle = "Specify name of new file"
@@ -136,6 +136,7 @@ class EditCSV {
         if (result == JFileChooser.APPROVE_OPTION) {
             // user selects a file
             val selectedFile = fileChooser.selectedFile
+            prefs.put(LAST_USED_FOLDER, fileChooser.selectedFile.parent)
 
             saveNetCSV(filePath, selectedFile)
 

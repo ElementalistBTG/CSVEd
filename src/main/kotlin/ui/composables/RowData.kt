@@ -73,7 +73,7 @@ fun rowData(
 
 @Composable
 fun rowColor(system: CSVUnit, selected: Boolean): Color {
-    return if (system.name == endSystems || system.name == lastEntry) {
+    return if (system.name == END_SYSTEMS || system.name == LAST_ENTRY) {
         if (selected) {
             Color(0xFFb862fc)
         } else {

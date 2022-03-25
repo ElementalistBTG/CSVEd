@@ -21,7 +21,6 @@ fun buttons(
     onClearSelectionClicked: () -> Unit,
     onEnableAll: () -> Unit,
     onSearch: (String) -> Job,
-    onFolderSelect: () -> Unit,
     onFindNext: () -> Job
 ) {
     val searchPressed = remember { mutableStateOf(false) }
@@ -70,18 +69,6 @@ fun buttons(
             onClick = onEnableAll
         ) {
             Text("Enable all")
-        }
-
-        Spacer(modifier = Modifier.padding(3.dp))
-
-        OutlinedButton(
-            colors = ButtonDefaults.textButtonColors(
-                backgroundColor = Color.LightGray,
-                contentColor = Color.Blue
-            ),
-            onClick = onFolderSelect
-        ) {
-            Text("Default Folder...")
         }
 
         Spacer(modifier = Modifier.padding(3.dp))

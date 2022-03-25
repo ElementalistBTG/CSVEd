@@ -1,8 +1,6 @@
 package ui.composables
 
 import androidx.compose.ui.awt.ComposeWindow
-import model.CSVUnit
-import start_directory
 import javax.swing.*
 
 //fun newEntry(): CSVUnit{
@@ -78,22 +76,6 @@ fun areYouSure(): Boolean {
 
 private fun isNumber(s: String?): Boolean {
     return if (s.isNullOrEmpty()) false else s.all { Character.isDigit(it) }
-}
-
-fun chooseFolder(): String {
-    val fileChooser = JFileChooser(start_directory)
-    fileChooser.apply {
-        dialogTitle = "Choose default location for files"
-        fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
-    }
-    val result = fileChooser.showOpenDialog(ComposeWindow())
-    var selectedFolder = ""
-    if (result == JFileChooser.APPROVE_OPTION) {
-        // user selects a file
-        selectedFolder = fileChooser.selectedFile.toString()
-    }
-    println(selectedFolder)
-    return selectedFolder
 }
 
 
