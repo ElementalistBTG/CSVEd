@@ -28,10 +28,13 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import buttons
 import endSystems
+import kotlinx.coroutines.launch
 import model.CSVUnit
 import rowData
+import start_directory
 import titles
 import ui.composables.areYouSure
+import ui.composables.chooseFolder
 import ui.composables.chooseMoveIndexDialog
 import ui.composables.showDialogWithMessage
 import util.swapList
@@ -86,6 +89,37 @@ fun main() = application {
             itemRightClicked = index
             expanded = true
         }
+        //system to find
+        val coroutineScope = rememberCoroutineScope()
+        val itemWithMatchingName = mutableListOf<Int>()
+        var listIterator = itemWithMatchingName.listIterator()
+        val searchSystem = { name: String ->
+            coroutineScope.launch {
+                itemWithMatchingName.clear()
+                for (item in myList) {
+                    if (item.name.contains(name, ignoreCase = true)) {
+                        itemWithMatchingName.add(item.id.toInt())
+                    }
+                }
+                if(itemWithMatchingName.isNotEmpty()){
+                    listIterator = itemWithMatchingName.listIterator()
+                    listState.scrollToItem(itemWithMatchingName.first() -1)
+                }
+            }
+        }
+
+        val findNext = {
+            coroutineScope.launch {
+                if(listIterator.hasNext()){
+                    listState.scrollToItem(listIterator.next() -1)
+                }else if(listIterator.hasPrevious()){//ensure we don't call on empty iterator
+                    listIterator = itemWithMatchingName.listIterator()
+                    listState.scrollToItem(listIterator.next() -1)
+                }
+
+            }
+        }
+
 
         DesktopMaterialTheme {
             Column {
@@ -96,7 +130,13 @@ fun main() = application {
                     onSaveAsClicked = { saveAsFile() },
                     onClearSelectionClicked = { clearSelection() },
                     onEnableAll = { enableAll() },
-                    onSearch = { searchSystem() }
+                    onSearch = searchSystem,
+                    onFolderSelect = {
+                        val folderChoosen = chooseFolder()
+                        if (folderChoosen != "")
+                            start_directory = folderChoosen
+                    },
+                    onFindNext = findNext
                 )
                 Spacer(modifier = Modifier.padding(3.dp))
                 Text(text = "File: ${pathOfOpenedFile.value}")
@@ -162,10 +202,8 @@ fun main() = application {
     }
 }
 
-private fun searchSystem(){}
-
 private fun enableAll() {
-    if(areYouSure()){
+    if (areYouSure()) {
         for (item in myList) {
             item.enabled = "1"
         }
@@ -197,7 +235,7 @@ private fun saveAsFile() {
 private fun recalculateIds() {
     for ((id, item) in myList.withIndex()) {
         item.id = (id + 1).toString()
-        if(item.name == endSystems)
+        if (item.name == endSystems)
             endSystemsRow = item.id
     }
 }
@@ -234,9 +272,6 @@ private fun performCut() {
     myList.removeAll(removeList)
     //when adding rows it is done in parallel so the entries get mixed up so it need to be sorted before we paste
     myClipBoard.sortBy { it.id.toInt() }
-    for(item in myClipBoard){
-        println(item)
-    }
 }
 
 private fun moveSelected() {

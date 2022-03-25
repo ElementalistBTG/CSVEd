@@ -79,7 +79,7 @@ fun rowColor(system: CSVUnit, selected: Boolean): Color {
         } else {
             Color(0xFFddb3ff)
         }
-    } else if (system.latitude == "0") {
+    } else if (system.latitude[0] == '0') {
         if (selected) {
             Color(0xFFffdb66)
         } else {

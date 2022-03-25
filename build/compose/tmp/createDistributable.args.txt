@@ -7,11 +7,11 @@
 --java-options
 "'-Dcompose.application.resources.dir=$APPDIR\\resources'"
 --main-jar
-"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\tmp\\createDistributable\\libs\\CSVEd-1.0-c136374f1924659d952e3794779f43e.jar"
+"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\tmp\\createDistributable\\libs\\CSVEd-1.0-8994e31c4d53b13c38efec8dc699d96f.jar"
 --main-class
 "ui.MainKt"
 --icon
-"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\icon.png"
+"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\icon.ico"
 --java-options
 "'-Dcompose.application.configure.swing.globals=true'"
 --java-options
@@ -22,5 +22,9 @@
 "C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\binaries\\main\\app"
 --name
 "CSVEd"
+--description
+"CSV editor for Radio Mobile csv files"
+--copyright
+"© 2022 Dinos Michelis. All rights reserved."
 --app-version
-"1.0.0"
+"1.0.1"

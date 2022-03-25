@@ -44,8 +44,13 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Msi)//for windows only
             packageName = "CSVEd"
-            packageVersion = "1.0.0"
-            windows.iconFile.set(project.file("icon.png"))
+            packageVersion = "1.0.1"
+            description = "CSV editor for Radio Mobile csv files"
+            copyright = "© 2022 Dinos Michelis. All rights reserved."
+            windows {
+                exePackageVersion = "1.0.1"
+            }
+            windows.iconFile.set(File("C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\icon.ico"))
         }
     }
 }

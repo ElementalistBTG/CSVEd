@@ -2,10 +2,8 @@ package ui.composables
 
 import androidx.compose.ui.awt.ComposeWindow
 import model.CSVUnit
-import javax.swing.JLabel
-import javax.swing.JOptionPane
-import javax.swing.JPanel
-import javax.swing.JTextField
+import start_directory
+import javax.swing.*
 
 //fun newEntry(): CSVUnit{
 //
@@ -64,7 +62,7 @@ fun chooseMoveIndexDialog(endSystemsRow: String): Int {
     }
 }
 
-fun areYouSure(): Boolean{
+fun areYouSure(): Boolean {
 //default icon, custom title
     //default icon, custom title
     val n = JOptionPane.showConfirmDialog(
@@ -74,12 +72,28 @@ fun areYouSure(): Boolean{
         JOptionPane.YES_NO_OPTION
     )
 
-    return n== JOptionPane.YES_OPTION
+    return n == JOptionPane.YES_OPTION
 
 }
 
 private fun isNumber(s: String?): Boolean {
     return if (s.isNullOrEmpty()) false else s.all { Character.isDigit(it) }
+}
+
+fun chooseFolder(): String {
+    val fileChooser = JFileChooser(start_directory)
+    fileChooser.apply {
+        dialogTitle = "Choose default location for files"
+        fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
+    }
+    val result = fileChooser.showOpenDialog(ComposeWindow())
+    var selectedFolder = ""
+    if (result == JFileChooser.APPROVE_OPTION) {
+        // user selects a file
+        selectedFolder = fileChooser.selectedFile.toString()
+    }
+    println(selectedFolder)
+    return selectedFolder
 }
 
 

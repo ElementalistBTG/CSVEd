@@ -101,7 +101,7 @@ class EditCSV {
                 }
             }
 
-            if(data.last().name != "LAST ENTRY"){
+            if (data.last().name != "LAST ENTRY") {
                 //In the end we add one more item as a last line
                 data.add(
                     CSVUnit(
@@ -130,6 +130,7 @@ class EditCSV {
         fileChooser.apply {
             fileFilter = csvTypeFilter
             dialogTitle = "Specify name of new file"
+            selectedFile = File(filePath)
         }
         val result = fileChooser.showSaveDialog(ComposeWindow())
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -172,7 +173,7 @@ class EditCSV {
             if (nextLine != null && lastOccurenceUnit != null) {
                 netList.add(
                     listOf(
-                        nextLine.substring(0,lastOccurenceUnit + 1) + selectedFile.nameWithoutExtension + "_Unit.csv"
+                        nextLine.substring(0, lastOccurenceUnit + 1) + selectedFile.nameWithoutExtension + "_Unit.csv"
                     )
                 )//Unit
             }
@@ -183,7 +184,10 @@ class EditCSV {
             if (nextLine2 != null && lastOccurenceUnit2 != null) {
                 netList.add(
                     listOf(
-                        nextLine2.substring(0,lastOccurenceUnit2 + 1) + selectedFile.nameWithoutExtension + "_NetData.csv"
+                        nextLine2.substring(
+                            0,
+                            lastOccurenceUnit2 + 1
+                        ) + selectedFile.nameWithoutExtension + "_NetData.csv"
                     )
                 )//NetData
             }
@@ -198,9 +202,7 @@ class EditCSV {
         dataList.forEach { item ->
             antennaHeights.add(item.antennaHeight)
         }
-        for(i in dataList.size .. 1985){
-            antennaHeights.add("0")
-        }
+
 
         try {
             myReader.open(filePath) {
@@ -212,8 +214,12 @@ class EditCSV {
                 readNext()?.let { netDataList.add(it) }
                 readNext()?.let { netDataList.add(it) }
                 readNext()?.let { netDataList.add(it) }
-                readNext()?.let { netDataList.add(it) }
-                readNext()
+                readNext()?.let { netDataList.add(it) }//9th line
+                val line = readNext()
+                for (i in dataList.size..line!!.size-2) {
+                    // we add 0s to the rest of the line
+                    antennaHeights.add("0")
+                }
                 netDataList.add(antennaHeights)//adding the antennas' heights
                 readNext()?.let { netDataList.add(it) }
                 readNext()?.let { netDataList.add(it) }
@@ -230,7 +236,7 @@ class EditCSV {
 
     }
 
-    private fun saveUnitCSV( writeToFilePath: String, dataList: List<CSVUnit>) {
+    private fun saveUnitCSV(writeToFilePath: String, dataList: List<CSVUnit>) {
         unitList.add(listOf("Radio Mobile"))
         unitList.add(listOf("$" + "Unit"))
         unitList.add(
@@ -250,13 +256,24 @@ class EditCSV {
             )
         )
         for (item in dataList) {
+            var lat = item.latitude
+            var lon = item.longitude
+            var enabled = "1"
+            if (item.latitude.isNotEmpty()) {
+                if (item.latitude[0] == '0') {
+                    lat = "0.11"
+                    lon = "0.11"
+                    enabled = "0"
+                }
+            }
+
             unitList.add(
                 listOf(
                     item.id,
                     item.name,
-                    item.enabled,
-                    item.latitude,
-                    item.longitude,
+                    enabled,
+                    lat,
+                    lon,
                     item.altitude,
                     "27",//icon
                     "FFFFFF",//forecolor
