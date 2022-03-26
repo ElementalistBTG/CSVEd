@@ -3,9 +3,6 @@ package ui.composables
 import androidx.compose.ui.awt.ComposeWindow
 import javax.swing.*
 
-//fun newEntry(): CSVUnit{
-//
-//}
 
 fun showDialogWithMessage(message: String) {
     JOptionPane.showMessageDialog(
@@ -39,17 +36,6 @@ fun chooseMoveIndexDialog(endSystemsRow: String): Int {
     } else if (result == JOptionPane.NO_OPTION) {
         n = (endSystemsRow.toInt() + 1).toString()
     }
-    println(n)
-
-//    val n: String? = JOptionPane.showInputDialog(
-//        ComposeWindow(),
-//        "Choose the id you want the items to move before: ",
-//        "Choose row index",
-//        JOptionPane.PLAIN_MESSAGE,
-//        null,
-//        null,
-//        "1"
-//    ) as String?
 
     return if (isNumber(n)) {
         //if a number is given as input then we take the value-1 since Kotlin/Java arrays start from 0 but ids start from 1
@@ -61,17 +47,16 @@ fun chooseMoveIndexDialog(endSystemsRow: String): Int {
 }
 
 fun areYouSure(): Boolean {
-//default icon, custom title
     //default icon, custom title
     val n = JOptionPane.showConfirmDialog(
         ComposeWindow(),
-        "Are you sure that you want to enable all systems?",
+        "Are you sure that you want to enable all systems?\n" +
+                "(The systems with no real coordinates will be saved as disabled after saving)",
         "Enable all systems",
         JOptionPane.YES_NO_OPTION
     )
 
     return n == JOptionPane.YES_OPTION
-
 }
 
 private fun isNumber(s: String?): Boolean {

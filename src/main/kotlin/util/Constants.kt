@@ -1,10 +1,11 @@
+//We define weights of each column
 const val id_weight = 0.3f
 const val name_weight = 1f
 const val lat_weight = 1f
 const val long_weight = 1f
 const val alt_weight = 0.7f
 const val ant_alt_weight = 0.5f
-const val checkbox_weight = 0.3f
+const val checkbox_weight = 0.35f
 
 var LAST_USED_FOLDER = "C:\\Users\\Elementalist\\Desktop\\csv"
 

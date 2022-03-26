@@ -13,15 +13,14 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.isCtrlPressed
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import buttons
 import END_SYSTEMS
+import androidx.compose.ui.input.key.*
+import data.EditCSV
 import kotlinx.coroutines.launch
 import model.CSVUnit
 import rowData
@@ -39,7 +38,7 @@ import java.nio.file.Path
 
 
 lateinit var myList: SnapshotStateList<CSVUnit>
-lateinit var pathOfOpenedFile: MutableState<String>
+lateinit var nameOfOpenedFile: MutableState<String>
 val myClipBoard = mutableListOf<CSVUnit>()
 val selectedItems = mutableStateMapOf<Int, Boolean>()
 var endSystemsRow = "0"
@@ -52,7 +51,7 @@ fun main() = application {
     Window(
         title = "Radio Mobile CSV Editor",
         onCloseRequest = ::exitApplication,
-        state = rememberWindowState(width = 800.dp, height = 800.dp),
+        state = rememberWindowState(width = 1000.dp, height = 600.dp),
         onKeyEvent = {
             if (it.isCtrlPressed && it.key == Key.S) {
                 saveAsFile()
@@ -60,17 +59,40 @@ fun main() = application {
             } else if (it.key == Key.Delete) {
                 deleteSelected()
                 true
+            } else if (it.key == Key.ShiftLeft && it.type == KeyEventType.KeyDown) {
+                shiftPressed()
+                true
+            } else if (it.key == Key.ShiftLeft && it.type == KeyEventType.KeyUp) {
+                shiftUnPressed()
+                true
             } else {
                 // let other handlers receive this event
                 false
             }
         }
     ) {
-        pathOfOpenedFile = remember { mutableStateOf("") }
+        //name of file opened
+        nameOfOpenedFile = remember { mutableStateOf("") }
+        //list of data
         myList = remember { mutableStateListOf<CSVUnit>() }
         val listState = rememberLazyListState() //for list items
+        var lastSelectedRow = 0
         val onItemSelected = { selected: Boolean, index: Int ->
-            selectedItems[index] = selected
+            if (shiftIsPressed) {
+                if(lastSelectedRow<index){
+                    for (i in lastSelectedRow..index){
+                        selectedItems[i] = selected
+                    }
+                }else{
+                    for (i in lastSelectedRow downTo index){
+                        selectedItems[i] = selected
+                    }
+                }
+                lastSelectedRow = index
+            } else {
+                selectedItems[index] = selected
+                lastSelectedRow = index
+            }
         }
         var expanded by mutableStateOf(false)
         var itemRightClicked by mutableStateOf(-1)
@@ -105,7 +127,6 @@ fun main() = application {
                     listIterator = itemWithMatchingName.listIterator()
                     listState.scrollToItem(listIterator.next() - 1)
                 }
-
             }
         }
 
@@ -122,12 +143,12 @@ fun main() = application {
                     onFindNext = findNext
                 )
                 Spacer(modifier = Modifier.padding(3.dp))
-                Text(text = "File: ${pathOfOpenedFile.value}")
+                Text(text = "File: ${nameOfOpenedFile.value}")
                 Spacer(modifier = Modifier.padding(5.dp))
                 //Second Row is for titles
                 titles()
                 Divider(color = Color.Red, modifier = Modifier.height(3.dp))
-                //Rest is for data
+                //Rest is for data + dropdown menu when called
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
@@ -185,6 +206,17 @@ fun main() = application {
     }
 }
 
+var shiftIsPressed = false
+fun shiftUnPressed() {
+    //set variable
+    shiftIsPressed = false
+}
+
+fun shiftPressed() {
+    //select multiple lines if shift pressed
+    shiftIsPressed = true
+}
+
 private fun enableAll() {
     if (areYouSure()) {
         for (item in myList) {
@@ -203,7 +235,7 @@ private fun openNewFile() {
     val fileOpened = EditCSV().openFile()
     if (fileOpened != null) {
         myList.swapList(fileOpened.first)
-        pathOfOpenedFile.value = fileOpened.second.name
+        nameOfOpenedFile.value = fileOpened.second.name
         fileToSave = fileOpened.second.toPath()
     }
     recalculateIds()
@@ -364,7 +396,7 @@ private fun createCSVDataFromExcel(): List<CSVUnit>? {
             .replace(".", ",") //make all decimals to be displayed using commas and not dots
             .split(delimiter1, delimiter2) //use the delimiters
 
-        //we split the data we got for every 3 values
+        //we split the data we got for every 3 values (name, latitude, longitude)
         for (i in splitData.indices step 3) {
             returnList.add(
                 CSVUnit(

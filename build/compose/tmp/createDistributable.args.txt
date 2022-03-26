@@ -7,7 +7,7 @@
 --java-options
 "'-Dcompose.application.resources.dir=$APPDIR\\resources'"
 --main-jar
-"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\tmp\\createDistributable\\libs\\CSVEd-1.0-8994e31c4d53b13c38efec8dc699d96f.jar"
+"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\tmp\\createDistributable\\libs\\CSVEd-1.0-116338cbb0cd487d92fd477d8dd285d0.jar"
 --main-class
 "ui.MainKt"
 --icon
