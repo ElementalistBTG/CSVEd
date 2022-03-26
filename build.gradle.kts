@@ -3,8 +3,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.21"
-    id("org.jetbrains.compose") version "1.0.0-alpha3"
+    kotlin("jvm") version "1.6.10"
+    id("org.jetbrains.compose") version "1.1.1"
 }
 
 group = "me.dinos"
@@ -20,11 +20,18 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
-    implementation("io.reactivex.rxjava3:rxjava:3.0.6")
-    implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation("androidx.compose.ui:ui:1.2.0-alpha03")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt")
 }
+
+// Add ProGuard to buildscript classpath
+//buildscript {
+//    repositories {
+//        mavenCentral()
+//    }
+//    dependencies {
+//        classpath("com.guardsquare:proguard-gradle:7.2.0")
+//    }
+//}
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "15"
@@ -37,20 +44,35 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Msi)//for windows only
             packageName = "CSVEd"
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.2"
             description = "CSV editor for Radio Mobile csv files"
             copyright = "© 2022 Dinos Michelis. All rights reserved."
-            windows.iconFile.set(File("C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\icon.ico"))
+            //windows.iconFile.set(File("icon.ico"))
+            //windows.iconFile.set(project.file("icon.ico"))
         }
     }
 }
 
-tasks.jar {
-    manifest {
-        attributes["Main-Class"] = "MainKt"
-    }
-    configurations["compileClasspath"].forEach { file: File ->
-        from(zipTree(file.absoluteFile))
-    }
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
+//tasks.jar {
+//    manifest {
+//        attributes["Main-Class"] = "MainKt"
+//    }
+//    configurations["compileClasspath"].forEach { file: File ->
+//        from(zipTree(file.absoluteFile))
+//    }
+//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+//}
+
+// Define task to obfuscate the JAR and output to <name>.min.jar
+//tasks.register<proguard.gradle.ProGuardTask>("obfuscate") {
+//    val packageUberJarForCurrentOS by tasks.getting
+//    dependsOn(packageUberJarForCurrentOS)
+//    val files = packageUberJarForCurrentOS.outputs.files
+//    injars(files)
+//    outjars(files.map { file -> File(file.parentFile, "${file.nameWithoutExtension}.min.jar") })
+//
+//    val library = if (System.getProperty("java.version").startsWith("1.")) "lib/rt.jar" else "jmods"
+//    libraryjars("${System.getProperty("java.home")}/$library")
+//
+//    configuration("proguard-rules.pro")
+//}

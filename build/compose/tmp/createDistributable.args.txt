@@ -7,11 +7,11 @@
 --java-options
 "'-Dcompose.application.resources.dir=$APPDIR\\resources'"
 --main-jar
-"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\tmp\\createDistributable\\libs\\CSVEd-1.0-116338cbb0cd487d92fd477d8dd285d0.jar"
+"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\tmp\\createDistributable\\libs\\CSVEd-1.0-5349172cd986abd3a5b84b26529f2c.jar"
 --main-class
 "ui.MainKt"
 --icon
-"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\icon.ico"
+"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\default-icons\\1.1.1\\icon-windows.ico"
 --java-options
 "'-Dcompose.application.configure.swing.globals=true'"
 --java-options
@@ -27,4 +27,4 @@
 --copyright
 "© 2022 Dinos Michelis. All rights reserved."
 --app-version
-"1.0.0"
+"1.0.2"

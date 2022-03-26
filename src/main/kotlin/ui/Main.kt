@@ -1,25 +1,27 @@
 package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
 
-import androidx.compose.desktop.DesktopMaterialTheme
-import androidx.compose.foundation.*
+import END_SYSTEMS
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import buttons
-import END_SYSTEMS
-import androidx.compose.ui.input.key.*
 import data.EditCSV
 import kotlinx.coroutines.launch
 import model.CSVUnit
@@ -44,8 +46,8 @@ val selectedItems = mutableStateMapOf<Int, Boolean>()
 var endSystemsRow = "0"
 
 @OptIn(
-    ExperimentalDesktopApi::class, ExperimentalFoundationApi::class,
-    androidx.compose.ui.ExperimentalComposeUiApi::class
+    ExperimentalFoundationApi::class,
+    ExperimentalComposeUiApi::class
 )
 fun main() = application {
     Window(
@@ -130,7 +132,7 @@ fun main() = application {
             }
         }
 
-        DesktopMaterialTheme {
+        MaterialTheme {
             Column {
                 //First row is for buttons
                 Spacer(modifier = Modifier.padding(5.dp))
