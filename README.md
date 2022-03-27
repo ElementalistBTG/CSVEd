@@ -6,8 +6,8 @@ Notice: This editor is somewhat tailored for personal usecases.
 
 
 <p align="center">
-  <img src="images/screenshot1.PNG" width="250" title="screenshot1">
-  <img src="images/screenshot2.PNG" width="250" title="screenshot2">
+  <img src="images/screenshot1.PNG" width="850" title="screenshot1">
+  <img src="images/screenshot2.PNG" width="850" title="screenshot2">
 </p>
 
 This application is written in Kotlin using Jetpack Compose Desktop and Java Swing for the UI.
