@@ -4,8 +4,11 @@
 
 Notice: This editor is somewhat tailored for personal usecases.
 
-![screenshot1](https://github.com/ElementalistBTG/CSVEd/images/screenshot1.png "Screenshot1")
-![screenshot2](https://github.com/ElementalistBTG/CSVEd/images/screenshot2.png "Screenshot2")
+
+<p align="center">
+  <img src="images/screenshot1.PNG" width="250" title="screenshot1">
+  <img src="images/screenshot2.PNG" width="250" title="screenshot2">
+</p>
 
 This application is written in Kotlin using Jetpack Compose Desktop and Java Swing for the UI.
 For reading and writing to csv files the [Kotlin CSV reader](https://github.com/doyaaaaaken/kotlin-csv) is used.
