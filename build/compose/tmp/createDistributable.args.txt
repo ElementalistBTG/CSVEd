@@ -7,7 +7,7 @@
 --java-options
 "'-Dcompose.application.resources.dir=$APPDIR\\resources'"
 --main-jar
-"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\tmp\\createDistributable\\libs\\CSVEd-1.0-5349172cd986abd3a5b84b26529f2c.jar"
+"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\tmp\\createDistributable\\libs\\CSVEd-1.0-9c34146f3419973d5de76df04d9afb40.jar"
 --main-class
 "ui.MainKt"
 --icon
@@ -25,6 +25,6 @@
 --description
 "CSV editor for Radio Mobile csv files"
 --copyright
-"© 2022 Dinos Michelis. All rights reserved."
+"©2022 Dinos Michelis. All rights reserved."
 --app-version
-"1.0.2"
+"1.0.3"

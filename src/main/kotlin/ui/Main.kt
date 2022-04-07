@@ -4,6 +4,7 @@ package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this 
 import END_SYSTEMS
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -17,6 +18,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
@@ -173,9 +175,22 @@ fun main() = application {
                             ) {
                                 if (expanded && itemRightClicked == index) {
                                     val items = listOf("Cut", "Paste before", "Delete", "Move To")
+                                    val active = remember { mutableStateOf(false) }
                                     DropdownMenu(
                                         expanded = true,
-                                        onDismissRequest = { expanded = false }
+                                        onDismissRequest = { expanded = false },
+                                        modifier = Modifier
+                                            .background(color = if (active.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.background)
+                                            .pointerMoveFilter(
+                                                onEnter = {
+                                                    active.value = true
+                                                    false
+                                                },
+                                                onExit = {
+                                                    active.value = false
+                                                    false
+                                                }
+                                            )
                                     ) {
                                         items.forEachIndexed { index, itemTitle ->
                                             DropdownMenuItem(onClick = {
@@ -312,7 +327,7 @@ private fun moveSelected() {
 private fun pasteSelected() {
     val indexTriggered = singleSelection()
     //check if single selection is made
-    if (indexTriggered > 0) {
+    if (indexTriggered > -1) {
         //check if we have cut data before
         if (myClipBoard.isEmpty()) {
             //if empty that means that we want to paste from excel (or other source)

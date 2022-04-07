@@ -20,7 +20,7 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 }
 
 // Add ProGuard to buildscript classpath
@@ -34,7 +34,7 @@ dependencies {
 //}
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "15"
+    kotlinOptions.jvmTarget = "11"
     kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }
 
@@ -44,11 +44,11 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Msi)//for windows only
             packageName = "CSVEd"
-            packageVersion = "1.0.2"
+            packageVersion = "1.0.3"
             description = "CSV editor for Radio Mobile csv files"
-            copyright = "© 2022 Dinos Michelis. All rights reserved."
-            //windows.iconFile.set(File("icon.ico"))
-            //windows.iconFile.set(project.file("icon.ico"))
+            copyright = "©2022 Dinos Michelis. All rights reserved."
+//            val iconsRoot = project.file("src/main/resources")
+//            windows.iconFile.set(iconsRoot.resolve("icon.ico"))
         }
     }
 }
