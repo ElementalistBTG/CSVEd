@@ -19,7 +19,7 @@ fun buttons(
     onSearch: (String) -> Job,
     onFindNext: () -> Job
 ) {
-    val searchPressed = remember { mutableStateOf(false) }
+
     val searchText = remember { mutableStateOf("") }
 
     Row {
@@ -44,33 +44,28 @@ fun buttons(
         )
         Spacer(modifier = Modifier.padding(3.dp))
         Box(modifier = Modifier.border(1.dp, color = Color.Red)) {
-            if (searchPressed.value) {
-                Row {
-                    BasicTextField(
-                        value = searchText.value,
-                        onValueChange = { newValue ->
-                            searchText.value = newValue
-                        },
-                        singleLine = true,
-                        maxLines = 1,
-                        modifier = Modifier.width(120.dp).height(35.dp).padding(start = 10.dp, end = 10.dp)
-                            .wrapContentHeight(Alignment.CenterVertically)
-                    )
-                    secondaryButton(
-                        onClick = { onSearch.invoke(searchText.value) },
-                        text = "Search"
-                    )
-                    secondaryButton(
-                        onClick = { onFindNext.invoke() },
-                        text = "Find Next"
-                    )
-                }
-            } else {
+
+            Row {
+                BasicTextField(
+                    value = searchText.value,
+                    onValueChange = { newValue ->
+                        searchText.value = newValue
+                    },
+                    singleLine = true,
+                    maxLines = 1,
+                    modifier = Modifier.width(120.dp).height(35.dp).padding(start = 10.dp, end = 10.dp)
+                        .wrapContentHeight(Alignment.CenterVertically)
+                )
                 secondaryButton(
-                    onClick = { searchPressed.value = true },
-                    text = "Search?"
+                    onClick = { onSearch.invoke(searchText.value) },
+                    text = "Search"
+                )
+                secondaryButton(
+                    onClick = { onFindNext.invoke() },
+                    text = "Find Next"
                 )
             }
+
         }
     }
 }
