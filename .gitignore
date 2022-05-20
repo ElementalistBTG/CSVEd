@@ -1,4 +1,6 @@
 /Executables/
 /proguard-rules.pro/
 /build/compose/
-/build/
+/build/compose/binaries/
+/build/compose/jars/
+/build/compose/tmp/
