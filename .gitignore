@@ -4,3 +4,5 @@
 /build/compose/binaries/
 /build/compose/jars/
 /build/compose/tmp/
+/build/wixToolset/
+/build/compose/tmp/main/runtime/lib/

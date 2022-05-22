@@ -44,8 +44,12 @@ import java.nio.file.Path
 lateinit var myList: SnapshotStateList<CSVUnit>
 lateinit var nameOfOpenedFile: MutableState<String>
 val myClipBoard = mutableListOf<CSVUnit>()
-val selectedItems = mutableStateMapOf<Int, Boolean>()
 var endSystemsRow = "0"
+
+
+val selectedItems = mutableStateMapOf<Int, Boolean>()
+var shiftIsPressed = false
+
 
 @OptIn(
     ExperimentalFoundationApi::class,
@@ -64,10 +68,10 @@ fun main() = application {
                 deleteSelected()
                 true
             } else if (it.key == Key.ShiftLeft && it.type == KeyEventType.KeyDown) {
-                shiftPressed()
+                shiftIsPressed = true
                 true
             } else if (it.key == Key.ShiftLeft && it.type == KeyEventType.KeyUp) {
-                shiftUnPressed()
+                shiftIsPressed = false
                 true
             } else {
                 // let other handlers receive this event
@@ -83,12 +87,12 @@ fun main() = application {
         var lastSelectedRow = 0
         val onItemSelected = { selected: Boolean, index: Int ->
             if (shiftIsPressed) {
-                if(lastSelectedRow<index){
-                    for (i in lastSelectedRow..index){
+                if (lastSelectedRow < index) {
+                    for (i in lastSelectedRow..index) {
                         selectedItems[i] = selected
                     }
-                }else{
-                    for (i in lastSelectedRow downTo index){
+                } else {
+                    for (i in lastSelectedRow downTo index) {
                         selectedItems[i] = selected
                     }
                 }
@@ -223,16 +227,6 @@ fun main() = application {
     }
 }
 
-var shiftIsPressed = false
-fun shiftUnPressed() {
-    //set variable
-    shiftIsPressed = false
-}
-
-fun shiftPressed() {
-    //select multiple lines if shift pressed
-    shiftIsPressed = true
-}
 
 private fun enableAll() {
     if (areYouSure()) {

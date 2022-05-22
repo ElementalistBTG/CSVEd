@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "me.dinos"
-version = "1.0"
+version = "1.6"
 
 repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
@@ -49,6 +49,9 @@ compose.desktop {
             copyright = "©2022 Dinos Michelis. All rights reserved."
 //            val iconsRoot = project.file("src/main/resources")
 //            windows.iconFile.set(iconsRoot.resolve("icon.ico"))
+            //modules to include
+            //includeAllModules = true
+            modules("java.instrument", "java.prefs", "jdk.unsupported")
         }
     }
 }
