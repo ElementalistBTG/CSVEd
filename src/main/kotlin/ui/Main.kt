@@ -296,7 +296,7 @@ private fun performCut() {
         }
     }
     myList.removeAll(removeList)
-    //when adding rows it is done in parallel so the entries get mixed up so it need to be sorted before we paste
+    //when adding rows it is done in parallel so the entries get mixed up, so it needs to be sorted before we paste
     myClipBoard.sortBy { it.id.toInt() }
 }
 
