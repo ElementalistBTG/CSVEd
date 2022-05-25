@@ -4,14 +4,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.10"
-    id("org.jetbrains.compose") version "1.1.0-alpha05"
+    id("org.jetbrains.compose") version "1.1.1"
 }
 
 group = "me.dinos"
-version = "1.0.5"
+version = "1.0.6"
 
 /*
-version = "1.0.3" working on Windows 7
+version = "1.0.3" -> working on Windows 7
 kotlin("jvm") version "1.5.31"
 id("org.jetbrains.compose") version "1.0.0"
 kotlinOptions.jvmTarget = "15"
@@ -44,7 +44,7 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
 }
 
 tasks.withType<KotlinCompile> {
