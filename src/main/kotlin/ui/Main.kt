@@ -243,6 +243,7 @@ private fun clearSelection() {
 private var fileToSave: Path? = null
 private fun openNewFile() {
     myList.clear()
+    clearSelection()
     val fileOpened = EditCSV().openFile()
     if (fileOpened != null) {
         myList.swapList(fileOpened.first)
