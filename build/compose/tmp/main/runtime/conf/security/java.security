@@ -71,7 +71,7 @@ security.provider.8=XMLDSig
 security.provider.9=SunPCSC
 security.provider.10=JdkLDAP
 security.provider.11=JdkSASL
-security.provider.12=SunMSCAPI
+security.provider.12=Apple
 security.provider.13=SunPKCS11
 
 #
@@ -160,7 +160,7 @@ securerandom.source=file:/dev/random
 # This is a comma-separated list of algorithm and/or algorithm:provider
 # entries.
 #
-securerandom.strongAlgorithms=Windows-PRNG:SunMSCAPI,DRBG:SUN
+securerandom.strongAlgorithms=NativePRNGBlocking:SUN,DRBG:SUN
 
 #
 # Sun provider DRBG configuration and default instantiation request.
