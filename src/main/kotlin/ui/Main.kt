@@ -61,7 +61,7 @@ fun main() = application {
             if (it.isCtrlPressed && it.key == Key.S) {
                 saveAsFile()
                 true
-            } else if (it.key == Key.Delete) {
+            } else if (it.key == Key.Delete && it.type == KeyEventType.KeyUp) {
                 deleteSelected()
                 true
             } else if (it.key == Key.ShiftLeft && it.type == KeyEventType.KeyDown) {
