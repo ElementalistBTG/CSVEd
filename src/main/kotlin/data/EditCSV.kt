@@ -6,6 +6,7 @@ import com.github.doyaaaaaken.kotlincsv.dsl.context.WriteQuoteMode
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import model.CSVUnit
+import ui.endSystemsRow
 import java.io.File
 import java.nio.file.Path
 import java.util.*
@@ -216,7 +217,7 @@ class EditCSV {
                 readNext()?.let { netDataList.add(it) }
                 readNext()?.let { netDataList.add(it) }//9th line
                 val line = readNext()
-                for (i in dataList.size..line!!.size-2) {
+                for (i in dataList.size..line!!.size - 2) {
                     // we add 0s to the rest of the line
                     antennaHeights.add("0")
                 }
@@ -269,6 +270,12 @@ class EditCSV {
                     enabled = "0"
                 }
             }
+            var icon = "27"//dot icon
+            var locked = "0"
+            if(item.id.toInt()< endSystemsRow.toInt()){
+                icon = "70"//icon for Radar
+                locked = "1"//we lock the systems
+            }
 
             unitList.add(
                 listOf(
@@ -278,12 +285,12 @@ class EditCSV {
                     lat,
                     lon,
                     item.altitude,
-                    "27",//icon
+                    icon,
                     "FFFFFF",//forecolor
                     "0",//style
                     "0",//backcolor
                     "",//text
-                    "0"//locked
+                    locked
                 )
             )
         }

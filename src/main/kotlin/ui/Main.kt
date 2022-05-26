@@ -2,7 +2,6 @@ package ui// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this 
 
 
 import END_SYSTEMS
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -52,12 +51,10 @@ var shiftIsPressed = false
 
 
 @OptIn(
-    ExperimentalFoundationApi::class,
     ExperimentalComposeUiApi::class
 )
 fun main() = application {
-    Window(
-        title = "Radio Mobile CSV Editor",
+    Window(title = "Radio Mobile CSV Editor",
         onCloseRequest = ::exitApplication,
         state = rememberWindowState(width = 1000.dp, height = 600.dp),
         onKeyEvent = {
@@ -77,8 +74,7 @@ fun main() = application {
                 // let other handlers receive this event
                 false
             }
-        }
-    ) {
+        }) {
         //name of file opened
         nameOfOpenedFile = remember { mutableStateOf("") }
         //list of data
@@ -174,27 +170,21 @@ fun main() = application {
                             )
                             Divider(color = Color.Black, modifier = Modifier.height(1.dp))
                             Box(
-                                modifier = Modifier.fillMaxHeight(),
-                                contentAlignment = Alignment.TopEnd
+                                modifier = Modifier.fillMaxHeight(), contentAlignment = Alignment.TopEnd
                             ) {
                                 if (expanded && itemRightClicked == index) {
                                     val items = listOf("Cut", "Paste before", "Delete", "Move To")
                                     val active = remember { mutableStateOf(false) }
-                                    DropdownMenu(
-                                        expanded = true,
+                                    DropdownMenu(expanded = true,
                                         onDismissRequest = { expanded = false },
-                                        modifier = Modifier
-                                            .background(color = if (active.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.background)
-                                            .pointerMoveFilter(
-                                                onEnter = {
-                                                    active.value = true
-                                                    false
-                                                },
-                                                onExit = {
-                                                    active.value = false
-                                                    false
-                                                }
-                                            )
+                                        modifier = Modifier.background(color = if (active.value) MaterialTheme.colors.onPrimary else MaterialTheme.colors.background)
+                                            .pointerMoveFilter(onEnter = {
+                                                active.value = true
+                                                false
+                                            }, onExit = {
+                                                active.value = false
+                                                false
+                                            })
                                     ) {
                                         items.forEachIndexed { index, itemTitle ->
                                             DropdownMenuItem(onClick = {
@@ -262,8 +252,7 @@ private fun saveAsFile() {
 private fun recalculateIds() {
     for ((id, item) in myList.withIndex()) {
         item.id = (id + 1).toString()
-        if (item.name == END_SYSTEMS)
-            endSystemsRow = item.id
+        if (item.name == END_SYSTEMS) endSystemsRow = item.id
     }
 }
 
@@ -363,6 +352,7 @@ private fun singleSelection(): Int {
     for (item in selectedItems.entries) {
         if (item.value) {
             if (firstEntry) {
+                //single selection, return the index of the selected item
                 firstEntry = false
                 index = item.key
             } else {
@@ -403,8 +393,7 @@ private fun createCSVDataFromExcel(): List<CSVUnit>? {
     } else {
         val delimiter1 = "\t" //delimiter for changing cell
         val delimiter2 = "\n" //delimiter for changing row
-        val splitData = clipboardData
-            .substringBeforeLast("") //drop the last space detected
+        val splitData = clipboardData.substringBeforeLast("") //drop the last space detected
             .replace(".", ",") //make all decimals to be displayed using commas and not dots
             .split(delimiter1, delimiter2) //use the delimiters
 
