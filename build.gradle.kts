@@ -18,19 +18,13 @@ kotlinOptions.jvmTarget = "15"
 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 includeAllModules = true
 
-version = "1.0.4"
+version = "1.0.6"
 kotlin("jvm") version "1.6.10"
 id("org.jetbrains.compose") version "1.1.1"
 kotlinOptions.jvmTarget = "15"
-implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt")
 includeAllModules = true
 
-version = "1.0.5"
-kotlin("jvm") version "1.6.10"
-id("org.jetbrains.compose") version "1.1.0-alpha05"
-kotlinOptions.jvmTarget = "15"
-implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-includeAllModules = true
  */
 
 
@@ -44,7 +38,7 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt")
 }
 
 tasks.withType<KotlinCompile> {
