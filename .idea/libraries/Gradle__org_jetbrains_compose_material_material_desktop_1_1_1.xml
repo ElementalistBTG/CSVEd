@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jetbrains.compose.material:material-desktop:1.1.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.material/material-desktop/1.1.1/9562f3d1265ac4485d96d6a42788cecf03a0f9fd/material-desktop-1.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.material/material-desktop/1.1.1/f10280b0880a5853edb6a1e55e84be8bff714288/material-desktop-1.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

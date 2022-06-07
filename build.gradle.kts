@@ -39,6 +39,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt")
+    implementation("org.jetbrains.skiko:skiko-awt:0.7.22")
 }
 
 tasks.withType<KotlinCompile> {
