@@ -38,14 +38,6 @@
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/../../build/classes/java/main" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../src/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../src/main/kotlin" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
-    </content>
-    <content url="file://$MODULE_DIR$/../../src/main">
-      <sourceFolder url="file://$MODULE_DIR$/../../src/main/kotlin" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
-    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0" level="project" />
@@ -76,5 +68,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.github.microutils:kotlin-logging-jvm:2.0.11" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-api:1.7.32" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.compose.ui:ui-util-desktop:1.1.1" level="project" />
+    <orderEntry type="library" name="jetbrains.skiko" level="project" />
   </component>
 </module>
