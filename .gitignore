@@ -6,3 +6,4 @@
 /build/compose/tmp/
 /build/wixToolset/
 /build/compose/tmp/main/runtime/lib/
+build/libs
