@@ -273,7 +273,7 @@ class EditCSV {
             var icon = "27"//dot icon
             var locked = "0"
             if(item.id.toInt()< endSystemsRow.toInt()){
-                icon = "70"//icon for Radar
+                icon = "71"//icon for Radar
                 locked = "1"//we lock the systems
             }
 
