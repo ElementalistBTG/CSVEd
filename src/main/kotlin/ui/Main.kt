@@ -30,6 +30,7 @@ import rowData
 import titles
 import ui.composables.areYouSure
 import ui.composables.chooseMoveIndexDialog
+import ui.composables.deleteSystems
 import ui.composables.showDialogWithMessage
 import util.swapList
 import java.awt.HeadlessException
@@ -340,9 +341,14 @@ private fun deleteSelected() {
                 removeList.add(selectedRow)
             }
         }
-        myList.removeAll(removeList)
-        clearSelection()
-        recalculateIds()
+        //join selected items in a string
+        val namesList = removeList.map { it.name }
+        val namesListString = namesList.joinToString("\n")
+        if(deleteSystems(namesListString)){
+            myList.removeAll(removeList)
+            clearSelection()
+            recalculateIds()
+        }
     }
 }
 

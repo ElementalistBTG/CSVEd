@@ -63,5 +63,17 @@ private fun isNumber(s: String?): Boolean {
     return if (s.isNullOrEmpty()) false else s.all { Character.isDigit(it) }
 }
 
+fun deleteSystems(systems : String): Boolean{
+
+    val n = JOptionPane.showConfirmDialog(
+        ComposeWindow(),
+        "Are you sure that you want to delete the following systems?\n$systems",
+        "Delete systems?",
+        JOptionPane.YES_NO_OPTION
+    )
+
+    return n == JOptionPane.YES_OPTION
+}
+
 
 
