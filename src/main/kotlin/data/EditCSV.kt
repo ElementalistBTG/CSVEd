@@ -270,9 +270,14 @@ class EditCSV {
                     enabled = "0"
                 }
             }
+            //check if the last chars are '_k'
+            val lastChars = item.name.takeLast(2)
+            if (lastChars == "_k" || lastChars == "κ") {
+                enabled = "0"
+            }
             var icon = "27"//dot icon
             var locked = "0"
-            if(item.id.toInt()< endSystemsRow.toInt()){
+            if (item.id.toInt() < endSystemsRow.toInt()) {
                 icon = "71"//icon for Radar
                 locked = "1"//we lock the systems
             }
