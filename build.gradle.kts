@@ -8,25 +8,7 @@ plugins {
 }
 
 group = "me.dinos"
-version = "1.0.6"
-
-/*
-version = "1.0.3" -> working on Windows 7
-kotlin("jvm") version "1.5.31"
-id("org.jetbrains.compose") version "1.0.0"
-kotlinOptions.jvmTarget = "15"
-implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-includeAllModules = true
-
-version = "1.0.6"
-kotlin("jvm") version "1.6.10"
-id("org.jetbrains.compose") version "1.1.1"
-kotlinOptions.jvmTarget = "15"
-implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt")
-includeAllModules = true
-
- */
-
+version = "1.0.9"
 
 repositories {
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
@@ -38,7 +20,7 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
     implementation("org.jetbrains.skiko:skiko-awt:0.7.22")
     implementation("org.jetbrains.skiko:skiko-awt-runtime-windows-x64:0.7.22")
 }
@@ -58,7 +40,7 @@ compose.desktop {
             description = "CSV editor for Radio Mobile csv files"
             copyright = "©2022 Dinos Michelis. All rights reserved."
             //modules to include
-            includeAllModules = true
+            //includeAllModules = true
             //modules("java.instrument", "java.prefs", "jdk.unsupported")
         }
     }
