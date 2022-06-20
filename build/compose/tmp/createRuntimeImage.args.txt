@@ -57,6 +57,8 @@
 --add-modules
 "jdk.crypto.ec"
 --add-modules
+"jdk.crypto.mscapi"
+--add-modules
 "jdk.dynalink"
 --add-modules
 "jdk.editpad"
@@ -141,4 +143,4 @@
 --no-man-pages
 --strip-native-commands
 --output
-"/Users/kon/IdeaProjects/CSVEd/build/compose/tmp/main/runtime"
+"C:\\Users\\Elementalist\\IdeaProjects\\CSVEd\\build\\compose\\tmp\\main\\runtime"
