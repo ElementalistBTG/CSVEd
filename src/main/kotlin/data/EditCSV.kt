@@ -157,17 +157,31 @@ class EditCSV {
         // we read the whole file and change only the lines we want
         val netList = mutableListOf<List<String>>()
         myReader.open(filePath) {
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(listOf(";")) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
-            readNext()?.let { netList.add(it) }
+            //must first read '$Include' and then start adding the csv files
+            //so we add all other lines first
+            var includeLine = readNext()
+            do{
+                if (includeLine != null) {
+                    netList.add(includeLine)
+                }
+                println(includeLine?.first())
+                includeLine = readNext()
+            }while(!includeLine?.first()?.contains("Include")!!)
+            //we add include now
+            netList.add(includeLine)
+
+//            readNext()?.let { netList.add(it) }//Radio Mobile
+//            readNext()?.let { netList.add(it) }//$version
+//            readNext()?.let { netList.add(it) }//4000
+//            readNext()?.let { netList.add(listOf(";")) }
+//            readNext()?.let { netList.add(it) }//$Map
+//            readNext()?.let { netList.add(it) }//.map
+//            readNext()?.let { netList.add(it) }//$Picture
+//            readNext()?.let { netList.add(it) }//.bmp
+//            readNext()?.let { netList.add(it) }//$Land
+//            readNext()?.let { netList.add(it) }//.dat
+//            readNext()?.let { netList.add(it) }//$include
+
             readNext()?.let { netList.add(it) }//12 Network
 
             val nextLine = readNext()?.first()
