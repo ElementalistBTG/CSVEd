@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="CSVEd:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="me.dinos" external.system.module.type="sourceSet" external.system.module.version="1.0.9" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="CSVEd:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="me.dinos" external.system.module.type="sourceSet" external.system.module.version="1.0.10" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="4" platform="JVM 15" allPlatforms="JVM [15]" useProjectSettings="false">
         <compilerSettings>
-          <option name="additionalArguments" value="-Xallow-no-source-files -Xuse-ir -Xopt-in=kotlin.RequiresOptIn" />
+          <option name="additionalArguments" value="-Xallow-no-source-files -Xuse-ir -opt-in kotlin.RequiresOptIn" />
         </compilerSettings>
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/../../build/classes/kotlin/test" />
@@ -16,7 +16,7 @@
             <array>
               <option value="$MODULE_DIR$/../../build/classes/java/main" />
               <option value="$MODULE_DIR$/../../build/classes/kotlin/main" />
-              <option value="$MODULE_DIR$/../../build/libs/CSVEd-1.0.9.jar" />
+              <option value="$MODULE_DIR$/../../build/libs/CSVEd-1.0.10.jar" />
             </array>
           </option>
           <option name="languageVersion" value="1.6" />
@@ -34,9 +34,6 @@
               <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.6.10/c118700e3a33c8a0d9adc920e9dec0831171925/kotlin-stdlib-common-1.6.10.jar" />
               <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.6.10/d0a7ff2e2500ef497ed0214ae40ad3c8387a6164/kotlin-script-runtime-1.6.10.jar" />
             </array>
-          </option>
-          <option name="errors">
-            <ArgumentParseErrors />
           </option>
         </compilerArguments>
       </configuration>
