@@ -55,6 +55,7 @@ var shiftIsPressed = false
     ExperimentalComposeUiApi::class
 )
 fun main() = application {
+    System.setProperty("skiko.renderApi", "OPENGL")
     Window(title = "Radio Mobile CSV Editor",
         onCloseRequest = ::exitApplication,
         state = rememberWindowState(width = 1000.dp, height = 600.dp),

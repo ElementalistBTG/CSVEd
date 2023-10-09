@@ -25,7 +25,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")//stable version 1.2.0 (readNext method is deprecated after this version)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")//stable version 1.6.2, latest 1.7.3
-    implementation("org.jetbrains.skiko:skiko-awt:0.7.22") //stable version 0.7.22 (last to work with koltin 1.6), latest 0.7.81
+    implementation("org.jetbrains.skiko:skiko-awt:0.7.22") //stable version 0.7.22 (last to work with kotlin 1.6), latest 0.7.81
     implementation("org.jetbrains.skiko:skiko-awt-runtime-windows-x64:0.7.22")//stable version 0.7.22
 }
 
